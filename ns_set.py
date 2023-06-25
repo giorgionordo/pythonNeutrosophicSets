@@ -2,20 +2,21 @@ from pyns.ns_universe import NSuniverse
 
 class NSset:
     """
-    class that defines a neutrosophic set over a given universe
+    Class that defines a neutrosophic set over a given universe
     ----------------------------------------------------------------------------------
-    author: Giorgio Nordo - Dipartimento MIFT Università di Messina, Italy
+    author: Giorgio Nordo - Dipartimento MIFT. Università di Messina, Italy
     www.nordo.it   |  giorgio.nordo@unime.it
     """
 
     # costruttore
     def __init__(self, elemento):
         """
-        generic constructor of a neutrosophic set
+        Generic constructor of an empty neutrosophic set defined over a universe
+        or copied by another object neutrosophic set.
         ----
         Parameters:
         - elemento: element on which the neutrosophic set is defined
-        (can be a universe set or a neutrosophic set object to be copied)
+          (can be a universe set or a neutrosophic set object to be copied)
         """
         insiemeneutrosofico = dict()
         if type(elemento) == NSuniverse:   # viene passato un universo e generato un insieme neutrosofico vuoto
@@ -33,6 +34,8 @@ class NSset:
     # metodo che restituisce l'universo come lista
     def getUniverse(self):
         """
+        Method that returns the universe of the neutrosophic set as a list of string.
+        ---
         Returns: list of the elements of the universe
         """
         return self.__universo.get()
@@ -43,8 +46,8 @@ class NSset:
     # assegna la tripla di appartenenza, indeterminatezza e non appartenenza ad un elemento
     def setElement(self, u, tripla):
         """
-        assign simultaneously the membership, indeterminacy and non-membership degree
-        to a specific element of the neutrosophic set
+        Assign simultaneously the membership, indeterminacy and non-membership degree
+        to a specific element of the neutrosophic set.
         ----
         Parameters:
         - u: element of the universe
@@ -74,7 +77,7 @@ class NSset:
     # assegna il grado di appartenenza ad un elemento
     def setMembership(self, u, mu):
         """
-        assign the membership degree to a specific element of the neutrosophic set
+        Assign the membership degree to a specific element of the neutrosophic set.
         ----
         Parameters:
         - u: element of the universe
@@ -91,7 +94,7 @@ class NSset:
     # assegna il grado di indeterminatezza ad un elemento
     def setIndeterminacy(self, u, sigma):
         """
-        assign the indeterminacy degree to a specific element of the neutrosophic set
+        Assign the indeterminacy degree to a specific element of the neutrosophic set.
         ----
         Parameters:
         - u: element of the universe
@@ -108,7 +111,7 @@ class NSset:
     # assegna il grado di non appartenenza ad un elemento
     def setNonMembership(self, u, omega):
         """
-        assign the non membership degree to a specific element of the neutrosophic set
+        Assign the non membership degree to a specific element of the neutrosophic set.
         ----
         Parameters:
         - u: element of the universe
@@ -127,7 +130,7 @@ class NSset:
     # restituisce la lista dei gradi di appartenenza, indeterminazione e non appartenenza
     def getElement(self, u):
         """
-        obtain the three degrees of membership of a given element of the current neutrosophic set
+        Obtain the three degrees of membership of a given element of the current neutrosophic set.
         ----
         Parameters:
         - u: element of the universe
@@ -143,7 +146,7 @@ class NSset:
     # restituisce il grado di appartenenza
     def getMembership(self, u):
         """
-        obtain the degree of membership of a given element of the current neutrosophic set
+        Obtain the degree of membership of a given element of the current neutrosophic set.
         ----
         Parameters:
         - u: element of the universe
@@ -158,7 +161,7 @@ class NSset:
     # restituisce il grado di indeterminazione
     def getIndeterminacy(self, u):
         """
-        obtain the degree of indeterminacy of a given element of the current neutrosophic set
+        Obtain the degree of indeterminacy of a given element of the current neutrosophic set.
         ----
         Parameters:
         - u: element of the universe
@@ -173,7 +176,7 @@ class NSset:
     # restituisce il grado di non appartenenza
     def getNonMembership(self, u):
         """
-        obtain the degree of non-membership of a given element of the current neutrosophic set
+        Obtain the degree of non-membership of a given element of the current neutrosophic set.
         ----
         Parameters:
         - u: element of the universe
@@ -189,7 +192,7 @@ class NSset:
     # pone l'insieme neutrosofico uguale all'insieme neutrosofico vuoto
     def setEmpty(self):
         """
-        makes the neutrosophic set equal to the null neutrosophic set
+        Makes the neutrosophic set equal to the null neutrosophic set.
         """
         for e in self.__universo.get():
             self.__insiemeneutrosofico[e] = [0, 0, 1]
@@ -198,7 +201,7 @@ class NSset:
     # pone l'insieme neutrosofico uguale all'insieme neutrosofico assoluto
     def setAbsolute(self):
         """
-        makes the neutrosophic set equal to the absolute neutrosophic set
+        Makes the neutrosophic set equal to the absolute neutrosophic set.
         """
         for e in self.__universo.get():
             self.__insiemeneutrosofico[e] = [1, 1, 0]
@@ -210,7 +213,7 @@ class NSset:
     # passato come parametro
     def isNSsubset(self, nsins):
         """
-        checks if the current NS set is contained in the second one passed as parameter
+        Checks if the current NS set is contained in the second one passed as parameter.
         ----
         Parameters:
         - nsins: second neutrosophic set
@@ -238,7 +241,7 @@ class NSset:
     # passato come parametro
     def isNSsuperset(self, nsins):
         """
-        checks if the current NS set contains the second one passed as parameter
+        Checks if the current NS set contains the second one passed as parameter.
         ----
         Parameters:
         - nsins second neutrosophic set
@@ -252,7 +255,8 @@ class NSset:
     # confronta due insiemi neutrosofici col metodo speciale __eq__
     # sovraccaricando l'operatore di uguaglianza == e restituisce True se sono uguali
     def __eq__(self, nsins):
-        """ compares two neutrosophic sets
+        """ Checks if the current NS set is equal to another one.
+        ----
         Parameters:
         - nsins second neutrosophic set
         Returns: True if the current neutrosophic set neutrosofically coincides with the second one
@@ -264,7 +268,8 @@ class NSset:
     # confronta due insiemi neutrosofici col metodo speciale __ne__
     # sovraccaricando l'operatore di non uguaglianza != e restituisce True se sono diversi
     def __ne__(self, nsins):
-        """ compares two neutrosophic sets
+        """ Checks if the current NS set is different from another one.
+        ----
         Parameters:
         - nsins second neutrosophic set
         Returns: True if the current neutrosophic set neutrosofically is different from the second one
@@ -277,7 +282,9 @@ class NSset:
 
     # unione neutrosofica
     def NSunion(self, nsins):
-        """ calculates and returns the neutrosophic union of the current set with the second one passed as parameter
+        """ Calculates and returns the neutrosophic union of the current set with the second one
+        passed as parameter.
+        ----
         Parameters:
         - nsins second neutrosophic set
         Returns: the neutrosophic union of the current neutrosophic set with the second one
@@ -302,7 +309,9 @@ class NSset:
 
     # intersezione neutrosofica
     def NSintersection(self, nsins):
-        """ calculates and returns the neutrosophic intersection of the current set with the second one passed as parameter
+        """ Calculates and returns the neutrosophic intersection of the current set with the second one
+        passed as parameter.
+        ----
         Parameters:
         - nsins second neutrosophic set
         Returns: the neutrosophic intersection of the current neutrosophic set with the second one
@@ -327,7 +336,8 @@ class NSset:
 
     # complementare neutrosofico
     def NScomplement(self):
-        """ calculates and returns the neutrosophic complement of the current neutrosophic set
+        """ Calculates and returns the neutrosophic complement of the current neutrosophic set.
+        ----
         Parameters:
         Returns: the neutrosophic complement of the current neutrosophic set
         """
@@ -347,7 +357,9 @@ class NSset:
 
     # differenza neutrosofica
     def NSdifference(self, nsins):
-        """ calculates and returns the neutrosophic difference of the current set with the second one passed as parameter
+        """ Calculates and returns the neutrosophic difference of the current set with the second one
+        passed as parameter.
+        ----
         Parameters:
         - nsins second neutrosophic set
         Returns: the neutrosophic difference of the current neutrosophic set with the second one
@@ -371,10 +383,6 @@ class NSset:
 
 
     #------------------------------------------------------------------------------------
-
-
-    # confronta due insiemi neutrosofici col metodo speciale __eq__
-    # sovraccaricando l'operatore di uguaglianza == e restituisce True se sono uguali
 
 
     # operatore unione (+) con overloading sul metodo __add__
@@ -411,7 +419,9 @@ class NSset:
 
     # verifica se un insieme neutrosofico è disgiunto da un altro
     def isNSdisjoint(self, nsins):
-        """ checks if the current set is neutrosophically disjoint with the second one passed as parameter
+        """ Checks if the current set is neutrosophically disjoint with the second one
+        passed as parameter.
+        ----
         Parameters:
         - nsins second neutrosophic set
         Returns: True if the current neutrosophic set is neutrosophically disjoint from the second one
@@ -425,7 +435,8 @@ class NSset:
 
     # restituisce l'insieme neutrosofico come stringa col metodo speciale __str__
     def __str__(self):
-        """ returns the neutrosophic set in string format for the user
+        """ Method that returns the neutrosophic set in string format for the user.
+        ----
         Returns: string containing a table representing the degree of membership, indeterminacy and
         non-membership of every element of the neutrosophic set
         """
@@ -443,9 +454,10 @@ class NSset:
     # restituisce la rappresentazione insieme neutrosofico come stringa col metodo speciale __repr__
     # che viene implicitamente utilizzata nelle altre classi
     def __repr__(self):
-        """ Returns the neutrosophic set in string format for other implementations (e.g., for use in other classes)
+        """ Method that returns the neutrosophic set in string format for other implementations
+        (e.g., for use in other classes).
+        ----
         Returns: string containing a table representing the degree of membership, indeterminacy and
         non-membership of every element of the neutrosophic set
         """
         return str(self)
-

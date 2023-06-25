@@ -1,18 +1,19 @@
 class NSuniverse:
     """
-    class defining a universe set for neutrosophic sets
+    Class defining a universe set for neutrosophic sets
     ----------------------------------------------------------------------------------
-    author: Giorgio Nordo - Dipartimento MIFT Università di Messina, Italy
+    author: Giorgio Nordo - Dipartimento MIFT, Università di Messina, Italy
     www.nordo.it   |  giorgio.nordo@unime.it
     """
 
     # costruttore
     def __init__(self, *args):
         """
-        costruttore generico di un universo
+        Generic constructor of a universe which accepts list, tuple, string,
+        list of af values, or other universe object.
         ----
         Parameters:
-        - args: argomento generico (lista, tupla, stringa o elenco di valori)
+        - args: generic argument (list, tuple, string, list of values or an universe object)
         """
         universo = list()   # lista di stringhe
         lunghezza = len(args)
@@ -23,10 +24,9 @@ class NSuniverse:
             elif type(elem) == NSuniverse:
                 universo = elem.get()
             elif type(elem) == str:
-                elem = elem.replace("(", "")
-                elem = elem.replace(")", "")
-                elem = elem.replace(",", " ")
-                elem = elem.replace(";", " ")  # la lunghezza potrebbe cambiare perché abbiamo rimosso i separatori
+                sostituz = { "(":"", ")":"", ",":" ", ";":" " }
+                for k in sostituz:
+                    elem = elem.replace(k, sostituz[k])
                 universo = elem.split()
             else:
                 universo = [str(elem)]
@@ -38,9 +38,11 @@ class NSuniverse:
 
     #------------------------------------------------------------------------------------
 
-    # metodo che restituisce l'universo come lista
+    # restituisce l'universo come lista di stringhe
     def get(self):
         """
+        Method that returns the universe as a list of strings.
+        ----
         Returns: lista degli elementi dell'universo
         """
         return self.__universo
@@ -49,6 +51,8 @@ class NSuniverse:
     # metodo che restituisce la cardinalità (il numero di elementi) dell'universo
     def cardinality(self):
         """
+        Method that returns the cardinality (the number of elements) of the universe
+        ----
         Returns: the number of elements of the current universe
         """
         return len(self.__universo)
@@ -57,20 +61,21 @@ class NSuniverse:
     #------------------------------------------------------------------------------------
 
     # confronta due insiemi universo col metodo speciale __eq__
-    # sovraccaricando l'operatore di uguaglianza ==
-    # e restituisce True se sono uguali
+    # sovraccaricando l'operatore di uguaglianza == e restituisce True se sono uguali
     def __eq__(self, unv):
-        """ compare the current universe with another one
+        """ Checks if the current universe is equal to another one.
+        ----
         Returns: True if the universes are equal
         """
         uguali = (self.__universo == unv.get())
         return uguali
 
+
     # confronta due insiemi universo col metodo speciale __ne__
-    # sovraccaricando l'operatore di non uguaglianza !=
-    # e restituisce True se sono diversi
+    # sovraccaricando l'operatore di non uguaglianza != e restituisce True se sono diversi
     def __ne__(self, unv):
-        """ compare the current universe with another one
+        """ Checks if the current universe is different from another one.
+        ----
         Returns: True if the universes are different
         """
         differenti = not (self == unv)
@@ -82,7 +87,8 @@ class NSuniverse:
 
     # restituisce l'universo come stringa col metodo speciale __str__
     def __str__(self):
-        """ returns the universe in string format for the user
+        """ Method that returns the universe in string format for the user.
+        ----
         Returns: string containing a list of the elements of the current universe
         """
         lista_elementi_stringa = [str(e) for e in self.__universo]
@@ -93,7 +99,9 @@ class NSuniverse:
     # restituisce la rappresentazione universo come stringa col metodo speciale __repr__
     # che viene implicitamente utilizzata nelle altre classi
     def __repr__(self):
-        """ returns the universe in string format for other implementations (e.g., for use in other classes)
+        """ Method that returns the universe in string format for other implementations
+            (e.g., for use in other classes).
+        ----
         Returns: string containing a list of the elements of the current universe
         """
         return str(self)

@@ -3,18 +3,23 @@ from pyns.ns_set import NSset
 
 class NSmapping:
     """
-    class defining a function between two universes of neutrosophic sets
+    Class that defines a mapping between two universes of neutrosophic sets
     ----------------------------------------------------------------------------------
-    author: Giorgio Nordo - Dipartimento MIFT Università di Messina, Italy
+    author: Giorgio Nordo - Dipartimento MIFT, Università di Messina, Italy
     www.nordo.it   |  giorgio.nordo@unime.it
     """
 
     # costruttore
     def __init__(self, unv_dominio, unv_codominio=None, valori=None):
         """
+        Generic constructor of a mapping between two universes.
+        It can be defined:
+        - by assigning only the domain and the codomain and, optionally, a list of values
+        - by passing another object mapping
+        ----
         Parameters:
         - unv_dominio: universe set that will constitute the domain of the function
-        - unv_codominio: universe set that will constitute the codomain of the function
+        - unv_codominio: optional universe set that will constitute the codomain of the function
         - valori: optional list (as a list or tuple) of codomain values that correspond
                   neatly to the elements of the domain
         """
@@ -31,10 +36,9 @@ class NSmapping:
             if type(valori) in [list,tuple]:
                 valori = [str(e) for e in valori]
             elif type(valori) == str:
-                valori = valori.replace("(", "")
-                valori = valori.replace(")", "")
-                valori = valori.replace(",", " ")
-                valori = valori.replace(";", " ")
+                sostituz = { "(":"", ")":"", ",":" ", ";":" " }
+                for k in sostituz:
+                    valori = valori.replace(k, sostituz[k])
                 valori = valori.split()   # riduce a lista
             if valori != None:
                 if len(valori) != card_dominio:
@@ -55,7 +59,8 @@ class NSmapping:
 
     # restituisce il dominio della funzione
     def getDomain(self):
-        """
+        """ Obtain the domain of the mapping.
+        ----
         Returns: the universe set corresponding to the domain of the current mapping
         """
         return self.__dominio.get()
@@ -63,14 +68,17 @@ class NSmapping:
 
     # restituisce il codominio della funzione
     def getCodomain(self):
-        """
+        """ Obtain the codomain of the mapping.
+        ----
         Returns: the universe set corresponding to the codomain of the current mapping
         """
         return self.__codominio.get()
 
+
     # restituisce le coppie elemento-valore come dizionario
     def getMap(self):
-        """
+        """ Obtain all the element-value pair defining the mapping.
+        ----
         Returns: the dictionary containing the element-value pairs of the mapping
         """
         return self.__map
@@ -81,7 +89,7 @@ class NSmapping:
     # assegna il valore mediante la funzione per uno specifico elemento
     def setValue(self, u, valore):
         """
-        assign a single value by the neutrosophic mapping to a specific element of the domain
+        Assign a single value by the neutrosophic mapping to a specific element of the domain.
         ----
         Parameters:
         - u: element of the domain
@@ -101,7 +109,7 @@ class NSmapping:
     # ottiene il valore mediante la funzione di un determinato elemento del dominio
     def getValue(self, u):
         """
-        get the value by the neutrosophic mapping of a specific element of the domain
+        Get the value by the neutrosophic mapping of a specific element of the domain.
         ----
         Parameters:
         - e: element of the domain
@@ -118,7 +126,8 @@ class NSmapping:
     # ottiene la fibra delaa funzione di un determinato elemento del codominio
     def getFibre(self, v):
         """
-        get the fibre by the neutrosophic mapping of a specific element of the codomain
+        Get the fibre (i.e. the inverse image of a singleton) by the neutrosophic mapping
+        of a specific element of the codomain.
         ----
         Parameters:
         - v: element of the codomain
@@ -139,23 +148,28 @@ class NSmapping:
     # confronta due funzioni col metodo speciale __eq__
     # sovraccaricando l'operatore di uguaglianza == e restituisce True se sono uguali
     def __eq__(self, g):
-        """ compares two neutrosophic mappings
+        """ Checks if the current mapping is equal to another one.
+        ----
         Parameters:
         - g: second mapping
         Returns: True if the current mapping coincides with the second one
         """
-        uguali = True
-        for e in self.getDomain():
-            if self.getValue(e) != g.getValue(e):
-                uguali = False
-                break
-        return uguali
+        if self.getDomain() != g.getDomain() or self.getCodomain() != g.getCodomain():
+            return False
+        else:
+            uguali = True
+            for e in self.getDomain():
+                if self.getValue(e) != g.getValue(e):
+                    uguali = False
+                    break
+            return uguali
 
 
     # confronta due funzioni col metodo speciale __ne__
     # sovraccaricando l'operatore di non uguaglianza != e restituisce True se sono diversi
     def __ne__(self, g):
-        """ compares two neutrosophic mappings
+        """ Checks if the current mapping is different from another one.
+        ----
         Parameters:
         - g: second mapping
         Returns: True if the current mapping is different from the second one
@@ -169,7 +183,7 @@ class NSmapping:
     # restituisce l'immagine di un insieme neutrosofico mediante una funzione
     def NSimage(self, nsins):
         """
-        returns the image of a neutrosophic set by a mapping
+        Method that returns the neutrosophic image of a neutrosophic set by a mapping.
         ----
         Parameters:
         - nsins: neutrosophic set on the domain
@@ -199,7 +213,7 @@ class NSmapping:
     # restituisce la controimmagine di un insieme neutrosofico mediante una funzione
     def NScounterimage(self, nsins):
         """
-        returns the counterimage of a neutrosophic set by a mapping
+        Method that returns the neutrosophic counterimage of a neutrosophic set by a mapping.
         ----
         Parameters:
         - nsins: neutrosophic set on the codomain
@@ -219,19 +233,22 @@ class NSmapping:
 
     # restituisce la funzione neutrosofica come stringa col metodo speciale __str__
     def __str__(self):
-        """ returns the mapping representation in string format for the user
+        """ Method that returns the mapping representation in string format for the user.
+        ----
         Returns: string containing a map of the current mapping
         """
         s = "\n"
         for e in self.__map:
-            s += f" {e:>10} --> {self.__map[e]:<10}\n"
+            s += f" {e:>10}  |->  {self.__map[e]:<10}\n"
         return s
 
 
     # restituisce la rappresentazione funzione neurtosofica come stringa col metodo speciale __repr__
     # che viene implicitamente utilizzata nelle altre classi
     def __repr__(self):
-        """ returns the universe for other implementations (e.g., for use in other classes)
+        """ Method that returns the universe for other implementations
+        (e.g., for use in other classes).
+        ----
         Returns: string containing a map of the current mapping
         """
         return str(self)
