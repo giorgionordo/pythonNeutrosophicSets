@@ -42,12 +42,12 @@ class NSmapping:
                 valori = valori.split()   # riduce a lista
             if valori != None:
                 if len(valori) != card_dominio:
-                    raise ValueError("il numero di valori passati non coincide con la cardinalità del dominio dichiarato")
+                    raise ValueError("the number of values passed does not coincide with the cardinality of the declared domain")
                 # controlla che tra i valori non ci siano elementi estranei al codominio
                 insieme_valori = set(valori)
                 insieme_codominio = set(unv_codominio.get())
                 if not insieme_valori.issubset(insieme_codominio):
-                    raise ValueError("uno o più valori non appartengono al codominio dichiarato")
+                    raise ValueError("one or more values do not belong to the declared codomain")
                 for i in range(card_dominio):
                     map[unv_dominio.get()[i]] = valori[i]
         self.__dominio = unv_dominio
@@ -98,9 +98,9 @@ class NSmapping:
         u = str(u)
         valore = str(valore)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.__dominio.get():
-            raise IndexError('elemento inesistente nel dominio della funzione')
+            raise IndexError('non-existent element in the domain of the function')
         if valore not in self.__codominio.get():
-            raise IndexError('elemento inesistente nel codominio della funzione')
+            raise IndexError('non-existent element in the codomain of the function')
         self.__map[u] = valore
 
 
@@ -113,11 +113,12 @@ class NSmapping:
         ----
         Parameters:
         - e: element of the domain
+        ----
         Returns: the value of u by the current mapping
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.__dominio.get():
-            raise IndexError('elemento inesistente nel dominio della funzione')
+            raise IndexError('non-existent element in the domain of the function')
         return self.__map[u]
 
 
@@ -131,11 +132,12 @@ class NSmapping:
         ----
         Parameters:
         - v: element of the codomain
+        ----
         Returns: the fibre of v expressed as list of elements of the domain
         """
         v = str(v)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if v not in self.__codominio.get():
-            raise IndexError('elemento inesistente nel codominio della funzione')
+            raise IndexError('non-existent element in the codomain of the function')
         ris = list()
         for e in self.__map:
             if self.__map[e] == v:
@@ -152,6 +154,7 @@ class NSmapping:
         ----
         Parameters:
         - g: second mapping
+        ----
         Returns: True if the current mapping coincides with the second one
         """
         if self.getDomain() != g.getDomain() or self.getCodomain() != g.getCodomain():
@@ -172,6 +175,7 @@ class NSmapping:
         ----
         Parameters:
         - g: second mapping
+        ----
         Returns: True if the current mapping is different from the second one
         """
         differenti = not (self == nsins)
@@ -187,6 +191,7 @@ class NSmapping:
         ----
         Parameters:
         - nsins: neutrosophic set on the domain
+        ----
         Returns: neutrosophic image of nsins by the current mapping
         """
         ris = NSset(self.__codominio)
@@ -217,6 +222,7 @@ class NSmapping:
         ----
         Parameters:
         - nsins: neutrosophic set on the codomain
+        ----
         Returns: neutrosophic counterimage of nsins by the current mapping
         """
         ris = NSset(self.__dominio)

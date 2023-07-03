@@ -30,7 +30,7 @@ class NSuniverse:
                 universo = elem.split()
             else:
                 universo = [str(elem)]
-        elif lunghezza > 1 :   # se la lunghezza è maggiore di 1
+        elif lunghezza > 1:   # se la lunghezza è maggiore di 1
             for i in range(lunghezza):
                 universo.append(str(args[i]))
         self.__universo = universo
@@ -43,7 +43,7 @@ class NSuniverse:
         """
         Method that returns the universe as a list of strings.
         ----
-        Returns: lista degli elementi dell'universo
+        Returns: list of the elements of the universe
         """
         return self.__universo
 

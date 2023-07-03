@@ -55,17 +55,17 @@ class NSset:
         """
         u = str(u)   # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('elemento inesistente')
+            raise IndexError('non-existent element')
         tripla = list(tripla)   # converte in lista in caso fosse una tupla
         mu = tripla[0]
         sigma = tripla[1]
         omega = tripla[2]
         if not (0 <= mu <= 1):
-            raise ValueError("valore del grado di appartenenza incompatibile")
+            raise ValueError("incompatible membership degree value")
         if not (0 <= sigma <= 1):
-            raise ValueError("valore del grado di indeterminatezza incompatibile")
+            raise ValueError("incompatible indeterminacy degree value")
         if not (0 <= omega <= 1):
-            raise ValueError("valore del grado di non appartenenza incompatibile")
+            raise ValueError("incompatible non-membership degree value")
         # assert 0 <= mu <= 1
         # assert 0 <= sigma <= 1
         # assert 0 <= omega <= 1
@@ -85,9 +85,9 @@ class NSset:
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('elemento inesistente')
+            raise IndexError('non-existent element')
         if not (0 <= mu <= 1):
-            raise ValueError("valore del grado di appartenenza incompatibile")
+            raise ValueError("incompatible membership degree value")
         self.__insiemeneutrosofico[u][0] = mu
 
 
@@ -102,9 +102,9 @@ class NSset:
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('elemento inesistente')
+            raise IndexError('non-existent element')
         if not (0 <= sigma <= 1):
-            raise ValueError("valore del grado di indeterminatezza incompatibile")
+            raise ValueError("incompatible indeterminacy degree value")
         self.__insiemeneutrosofico[u][1] = sigma
 
 
@@ -119,9 +119,9 @@ class NSset:
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('elemento inesistente')
+            raise IndexError('non-existent element')
         if not (0 <= omega <= 1):
-            raise ValueError("valore del grado di non appartenenza incompatibile")
+            raise ValueError("incompatible non-membership degree value")
         self.__insiemeneutrosofico[u][2] = omega
 
 
@@ -134,12 +134,13 @@ class NSset:
         ----
         Parameters:
         - u: element of the universe
+        ----
         Returns: the list containing the three degrees (membership, indeterminacy and non-membership)
         of the element u
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('elemento inesistente')
+            raise IndexError('non-existent element')
         return self.__insiemeneutrosofico[u]
 
 
@@ -150,11 +151,12 @@ class NSset:
         ----
         Parameters:
         - u: element of the universe
+        ----
         Returns: degree of membership of u
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('elemento inesistente')
+            raise IndexError('non-existent element')
         return self.__insiemeneutrosofico[u][0]
 
 
@@ -165,11 +167,12 @@ class NSset:
         ----
         Parameters:
         - u: element of the universe
+        ----
         Returns: degree of indeterminacy of u
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('elemento inesistente')
+            raise IndexError('non-existent element')
         return self.__insiemeneutrosofico[u][1]
 
 
@@ -180,11 +183,12 @@ class NSset:
         ----
         Parameters:
         - u: element of the universe
+        ----
         Returns: degree of non-membership of u
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('elemento inesistente')
+            raise IndexError('non-existent element')
         return self.__insiemeneutrosofico[u][2]
 
     #------------------------------------------------------------------------------------
@@ -217,6 +221,7 @@ class NSset:
         ----
         Parameters:
         - nsins: second neutrosophic set
+        ----
         Returns: True if the current neutrosophic set is neutrosofically contained in the second one
         """
         if self.getUniverse() != nsins.getUniverse():
@@ -245,6 +250,7 @@ class NSset:
         ----
         Parameters:
         - nsins second neutrosophic set
+        ----
         Returns: True if the current neutrosophic set neutrosofically contains the second one
         """
         return nsins.isNSsubset(self)
@@ -259,6 +265,7 @@ class NSset:
         ----
         Parameters:
         - nsins second neutrosophic set
+        ----
         Returns: True if the current neutrosophic set neutrosofically coincides with the second one
         """
         uguali = self.isNSsubset(nsins) and nsins.isNSsubset(self)
@@ -272,6 +279,7 @@ class NSset:
         ----
         Parameters:
         - nsins second neutrosophic set
+        ----
         Returns: True if the current neutrosophic set neutrosofically is different from the second one
         """
         differenti = not (self == nsins)
@@ -287,6 +295,7 @@ class NSset:
         ----
         Parameters:
         - nsins second neutrosophic set
+        ----
         Returns: the neutrosophic union of the current neutrosophic set with the second one
         """
         C = NSset(self.__universo)
@@ -314,6 +323,7 @@ class NSset:
         ----
         Parameters:
         - nsins second neutrosophic set
+        ----
         Returns: the neutrosophic intersection of the current neutrosophic set with the second one
         """
         C = NSset(self.__universo)
@@ -338,7 +348,6 @@ class NSset:
     def NScomplement(self):
         """ Calculates and returns the neutrosophic complement of the current neutrosophic set.
         ----
-        Parameters:
         Returns: the neutrosophic complement of the current neutrosophic set
         """
         C = NSset(self.__universo)
@@ -362,6 +371,7 @@ class NSset:
         ----
         Parameters:
         - nsins second neutrosophic set
+        ----
         Returns: the neutrosophic difference of the current neutrosophic set with the second one
         """
         C = NSset(self.__universo)
