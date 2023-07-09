@@ -84,6 +84,7 @@ class NSset:
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
             raise IndexError('non-existent element')
+        mu = float(mu)
         if not (0 <= mu <= 1):
             raise ValueError("incompatible membership degree value")
         self.__insiemeneutrosofico[u][0] = mu
@@ -101,6 +102,7 @@ class NSset:
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
             raise IndexError('non-existent element')
+        sigma = float(sigma)
         if not (0 <= sigma <= 1):
             raise ValueError("incompatible indeterminacy degree value")
         self.__insiemeneutrosofico[u][1] = sigma
@@ -118,6 +120,7 @@ class NSset:
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
             raise IndexError('non-existent element')
+        omega = float(omega)
         if not (0 <= omega <= 1):
             raise ValueError("incompatible non-membership degree value")
         self.__insiemeneutrosofico[u][2] = omega
