@@ -30,17 +30,6 @@ class NSset:
         self.__universo = NSuniverse(universo)
         self.__insiemeneutrosofico = insiemeneutrosofico
 
-
-    # metodo che restituisce l'universo come lista
-    def getUniverse(self):
-        """
-        Method that returns the universe of the neutrosophic set as a list of string.
-        ---
-        Returns: list of the elements of the universe
-        """
-        return self.__universo.get()
-
-
     #------------------------------------------------------------------------------------
 
     # assegna la tripla di appartenenza, indeterminatezza e non appartenenza ad un elemento
@@ -51,12 +40,21 @@ class NSset:
         ----
         Parameters:
         - u: element of the universe
-        - tripla: list or tuple of membership, indeterminacy and non-membership degree
+        - tripla: string, list or tuple of membership, indeterminacy and non-membership degree
         """
         u = str(u)   # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
             raise IndexError('non-existent element')
-        tripla = list(tripla)   # converte in lista in caso fosse una tupla
+        if type(tripla) == str:   # se il parametro è una stringa lo converte in lista
+            sostituz = { "(":"", ")":"", ",":" ", ";":" " }
+            for k in sostituz:
+                tripla = tripla.replace(k, sostituz[k])
+            tripla = tripla.split()
+        else:
+            tripla = list(tripla)   # converte in lista in caso fosse una tupla
+        if len(tripla) != 3:
+            raise ValueError('error in the number of parameters passed')
+        tripla = [float(e) for e in tripla]
         mu = tripla[0]
         sigma = tripla[1]
         omega = tripla[2]
@@ -126,6 +124,17 @@ class NSset:
 
 
     #------------------------------------------------------------------------------------
+
+
+    # metodo che restituisce l'universo come lista
+    def getUniverse(self):
+        """
+        Method that returns the universe of the neutrosophic set as a list of string.
+        ---
+        Returns: list of the elements of the universe
+        """
+        return self.__universo.get()
+
 
     # restituisce la lista dei gradi di appartenenza, indeterminazione e non appartenenza
     def getElement(self, u):
