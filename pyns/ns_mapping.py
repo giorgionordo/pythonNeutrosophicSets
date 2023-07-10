@@ -228,10 +228,7 @@ class NSmapping:
         ris = NSset(self.__dominio)
         for u in self.getDomain():
             valore = self.getValue(u)
-            mu = nsins.getMembership(valore)
-            sigma = nsins.getIndeterminacy(valore)
-            omega = nsins.getNonMembership(valore)
-            tripla = (mu, sigma, omega)
+            tripla = nsins.getElement(valore)   # i.e. (mu, sigma, omega)
             ris.setElement(u, tripla)
         return ris
 

@@ -55,9 +55,7 @@ class NSset:
         if len(tripla) != 3:
             raise ValueError('error in the number of parameters passed')
         tripla = [float(e) for e in tripla]
-        mu = tripla[0]
-        sigma = tripla[1]
-        omega = tripla[2]
+        (mu, sigma, omega) = tripla
         if not (0 <= mu <= 1):
             raise ValueError("incompatible membership degree value")
         if not (0 <= sigma <= 1):
@@ -147,7 +145,7 @@ class NSset:
         Parameters:
         - u: element of the universe
         ----
-        Returns: the list containing the three degrees (membership, indeterminacy and non-membership)
+        Returns: the list of floats containing the three degrees (membership, indeterminacy and non-membership)
         of the element u
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
@@ -241,13 +239,8 @@ class NSset:
         else:
             risultato = True
             for e in self.getUniverse():
-                muA = self.getMembership(e)
-                sigmaA = self.getIndeterminacy(e)
-                omegaA = self.getNonMembership(e)
-                #----
-                muB = nsins.getMembership(e)
-                sigmaB = nsins.getIndeterminacy(e)
-                omegaB = nsins.getNonMembership(e)
+                (muA, sigmaA, omegaA) = self.getElement(e)
+                (muB, sigmaB, omegaB) = nsins.getElement(e)
                 if (muA > muB) or (sigmaA > sigmaB) or (omegaA < omegaB):
                     risultato = False
                     break
@@ -312,17 +305,10 @@ class NSset:
         """
         C = NSset(self.__universo)
         for e in self.getUniverse():
-            muA = self.getMembership(e)
-            sigmaA = self.getIndeterminacy(e)
-            omegaA = self.getNonMembership(e)
+            (muA, sigmaA, omegaA) = self.getElement(e)
+            (muB, sigmaB, omegaB) = nsins.getElement(e)
             #----
-            muB = nsins.getMembership(e)
-            sigmaB = nsins.getIndeterminacy(e)
-            omegaB = nsins.getNonMembership(e)
-            #----
-            muC = max(muA, muB)
-            sigmaC = max(sigmaA, sigmaB)
-            omegaC = min(omegaA, omegaB)
+            (muC, sigmaC, omegaC) = (max(muA, muB), max(sigmaA, sigmaB), min(omegaA, omegaB))
             tripla = [muC, sigmaC, omegaC]
             C.setElement(e, tripla)
         return C
@@ -340,17 +326,10 @@ class NSset:
         """
         C = NSset(self.__universo)
         for e in self.getUniverse():
-            muA = self.getMembership(e)
-            sigmaA = self.getIndeterminacy(e)
-            omegaA = self.getNonMembership(e)
+            (muA, sigmaA, omegaA) = self.getElement(e)
+            (muB, sigmaB, omegaB) = nsins.getElement(e)
             #----
-            muB = nsins.getMembership(e)
-            sigmaB = nsins.getIndeterminacy(e)
-            omegaB = nsins.getNonMembership(e)
-            #----
-            muC = min(muA, muB)
-            sigmaC = min(sigmaA, sigmaB)
-            omegaC = max(omegaA, omegaB)
+            (muC, sigmaC, omegaC) = (min(muA, muB), min(sigmaA, sigmaB), max(omegaA, omegaB))
             tripla = [muC, sigmaC, omegaC]
             C.setElement(e, tripla)
         return C
@@ -364,13 +343,9 @@ class NSset:
         """
         C = NSset(self.__universo)
         for e in self.getUniverse():
-            muA = self.getMembership(e)
-            sigmaA = self.getIndeterminacy(e)
-            omegaA = self.getNonMembership(e)
+            (muA, sigmaA, omegaA) = self.getElement(e)
             #----
-            muC = omegaA
-            sigmaC = 1 - sigmaA
-            omegaC = muA
+            (muC, sigmaC, omegaC) = (omegaA, 1 - sigmaA, muA)
             tripla = [muC, sigmaC, omegaC]
             C.setElement(e, tripla)
         return C
@@ -388,17 +363,10 @@ class NSset:
         """
         C = NSset(self.__universo)
         for e in self.getUniverse():
-            muA = self.getMembership(e)
-            sigmaA = self.getIndeterminacy(e)
-            omegaA = self.getNonMembership(e)
+            (muA, sigmaA, omegaA) = self.getElement(e)
+            (muB, sigmaB, omegaB) = nsins.getElement(e)
             #----
-            muB = nsins.getMembership(e)
-            sigmaB = nsins.getIndeterminacy(e)
-            omegaB = nsins.getNonMembership(e)
-            #----
-            muC = min(muA, omegaB)
-            sigmaC = min(sigmaA, 1 - sigmaB)
-            omegaC = max(omegaA, muB)
+            (muC, sigmaC, omegaC) = (min(muA, omegaB), min(sigmaA, 1 - sigmaB), max(omegaA, muB))
             tripla = [muC, sigmaC, omegaC]
             C.setElement(e, tripla)
         return C
@@ -465,9 +433,7 @@ class NSset:
         barra = "-"*64
         s = "\n            |   membership   |  indeterminacy | non-membership |\n" + barra + "\n"
         for e in self.getUniverse():
-            mu = self.getMembership(e)
-            sigma = self.getIndeterminacy(e)
-            omega = self.getNonMembership(e)
+            (mu, sigma, omega) = self.getElement(e)
             s += f" {str(e):10} | {mu:14} | {sigma:14} | {omega:14} |\n"
         s += barra + "\n"
         return s
