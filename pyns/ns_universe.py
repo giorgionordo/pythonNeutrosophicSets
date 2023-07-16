@@ -16,6 +16,7 @@ class NSuniverse:
         - args: generic argument (list, tuple, string, list of values or an universe object)
         """
         universe = list()   # lista di stringhe
+        #--------------------
         length = len(args)
         if length == 1:
             elem = args[0]

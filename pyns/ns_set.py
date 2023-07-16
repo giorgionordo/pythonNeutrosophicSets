@@ -19,6 +19,7 @@ class NSset:
           (can be a universe set or a neutrosophic set object to be copied)
         """
         neutrosophicset = dict()    # dizionario di liste che contiene i values dell'insieme neutrosofico
+        #--------------------
         if type(element) == NSuniverse:   # viene passato un universo e generato un insieme neutrosofico vuoto
             universe = element
             for e in element.get():

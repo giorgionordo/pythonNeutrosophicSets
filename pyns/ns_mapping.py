@@ -10,7 +10,7 @@ class NSmapping:
     """
 
     # costruttore
-    def __init__(self, unv_domain, unv_codomain=None, values=None):
+    def __init__(self, *args):
         """
         Generic constructor of a mapping between two universes.
         It can be defined:
@@ -18,21 +18,31 @@ class NSmapping:
         - by passing another object mapping
         ----
         Parameters:
-        - unv_domain: universe set that will constitute the domain of the function
-        - unv_codomain: optional universe set that will constitute the codomain of the function
-        - values: optional list (as a list or tuple) of codomain values that correspond
-                  neatly to the elements of the domain
+        - args: generic argument; it can be a single parameter corresponding to an alread existent onject NSmapping
+                or a triple of arguments representing respectively, the domain, codomain
+                and the list of function values expressed as strings, lists or tuples
         """
         map = dict()
         #--------------------
-        if type(unv_domain) == NSmapping:
-            unv_codomain = unv_domain.getDomain()
-            map = unv_domain.getMap()
-            unv_domain = unv_domain.getDomain()
-        else:
-            card_domain = unv_domain.cardinality()
+        length = len(args)
+        if length == 0:
+            raise ValueError("constructor method must have at least one parameter")
+        elif length == 1:   # se c'è un solo argomento deve trattarsi di una funzione
+            if type(args[0]) == NSmapping:   # se è un oggetto NSmapping lo ricopia
+                domain = args[0].getDomain()
+                codomain = args[0].getDomain()
+                map = args[0].getMap()
+            else:   # altrimenti solleva una eccezione
+                raise ValueError("the type or number of parameters do not match those of the constructor method")
+        elif length == 3: # devono esserci tre parametri (dominio, codominio ed elenco valori)
+            domain = NSuniverse(args[0])
+            codomain = NSuniverse(args[1])
+            values = args[2]
+            if type(domain) != NSuniverse or type(codomain) != NSuniverse:
+                raise ValueError("the first two parameters of the constructor method (domain and codomain) must be universe sets")
+            card_domain = domain.cardinality()
             for i in range(card_domain):      # prepara il dizionario vuoto (con le sole chiavi)
-                map[unv_domain.get()[i]] = ''
+                map[domain.get()[i]] = ''
             if type(values) in [list, tuple]:
                 values = [str(e) for e in values]
             elif type(values) == str:
@@ -40,18 +50,22 @@ class NSmapping:
                 for k in sostituz:
                     values = values.replace(k, sostituz[k])
                 values = values.split()   # riduce a lista
+            else:
+                raise ValueError("the third parameter of the constructor method must contain a list of codomain values")
             if values != None:
                 if len(values) != card_domain:
                     raise ValueError("the number of values passed does not coincide with the cardinality of the declared domain")
                 # controlla che tra i values non ci siano elementi estranei al codominio
                 values_set = set(values)
-                codomain_set = set(unv_codomain.get())
+                codomain_set = set(codomain.get())
                 if not values_set.issubset(codomain_set):
                     raise ValueError("one or more values do not belong to the declared codomain")
                 for i in range(card_domain):
-                    map[unv_domain.get()[i]] = values[i]
-        self.__domain = unv_domain
-        self.__codomain = unv_codomain
+                    map[domain.get()[i]] = values[i]
+        else:
+            raise ValueError("the number of parameters do not match those of the constructor method")
+        self.__domain = domain
+        self.__codomain = codomain
         self.__map = map
 
 
@@ -234,7 +248,7 @@ class NSmapping:
 
     # restituisce la funzione neutrosofica come stringa col metodo speciale __str__
     def __str__(self):
-        """ Method that returns the mapping representation in string format for the user.
+        """ Method that returns the mapping in string format for the user.
         ----
         Returns: string containing a map of the current mapping
         """
