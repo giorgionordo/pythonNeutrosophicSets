@@ -247,7 +247,7 @@ class NSmapping:
     # restituisce la rappresentazione funzione neurtosofica come stringa col metodo speciale __repr__
     # che viene implicitamente utilizzata nelle altre classi
     def __repr__(self):
-        """ Method that returns the universe for other implementations
+        """ Method that returns the mapping for other implementations
         (e.g., for use in other classes).
         ----
         Returns: a detailed representation of the current mapping
