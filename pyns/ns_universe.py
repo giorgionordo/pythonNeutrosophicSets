@@ -15,25 +15,25 @@ class NSuniverse:
         Parameters:
         - args: generic argument (list, tuple, string, list of values or an universe object)
         """
-        universo = list()   # lista di stringhe
-        lunghezza = len(args)
-        if lunghezza == 1:
+        universe = list()   # lista di stringhe
+        length = len(args)
+        if length == 1:
             elem = args[0]
             if type(elem) in [list, tuple]:
-                universo = [str(e) for e in elem]
+                universe = [str(e) for e in elem]
             elif type(elem) == NSuniverse:
-                universo = elem.get()
+                universe = elem.get()
             elif type(elem) == str:
                 sostituz = { "(":"", ")":"", ",":" ", ";":" " }
                 for k in sostituz:
                     elem = elem.replace(k, sostituz[k])
-                universo = elem.split()
+                universe = elem.split()
             else:
-                universo = [str(elem)]
-        elif lunghezza > 1:   # se la lunghezza è maggiore di 1
-            for i in range(lunghezza):
-                universo.append(str(args[i]))
-        self.__universo = universo
+                universe = [str(elem)]
+        elif length > 1:   # se la lunghezza è maggiore di 1
+            for i in range(length):
+                universe.append(str(args[i]))
+        self.__universe = universe
 
 
     #------------------------------------------------------------------------------------
@@ -45,7 +45,7 @@ class NSuniverse:
         ----
         Returns: list of the elements of the universe
         """
-        return self.__universo
+        return self.__universe
 
 
     # metodo che restituisce la cardinalità (il numero di elementi) dell'universo
@@ -55,7 +55,7 @@ class NSuniverse:
         ----
         Returns: the number of elements of the current universe
         """
-        return len(self.__universo)
+        return len(self.__universe)
 
 
     #------------------------------------------------------------------------------------
@@ -67,8 +67,8 @@ class NSuniverse:
         ----
         Returns: True if the universes are equal
         """
-        uguali = (self.__universo == unv.get())
-        return uguali
+        equal = (self.__universe == unv.get())
+        return equal
 
 
     # confronta due insiemi universo col metodo speciale __ne__
@@ -78,8 +78,8 @@ class NSuniverse:
         ----
         Returns: True if the universes are different
         """
-        differenti = not (self == unv)
-        return differenti
+        different = not (self == unv)
+        return different
 
 
     #------------------------------------------------------------------------------------
@@ -91,8 +91,8 @@ class NSuniverse:
         ----
         Returns: string containing a list of the elements of the current universe set
         """
-        lista_elementi_stringa = [str(e) for e in self.__universo]
-        s = "{ " + ", ".join(lista_elementi_stringa) + " }"
+        list_string_elements = [str(e) for e in self.__universe]
+        s = "{ " + ", ".join(list_string_elements) + " }"
         return s
 
 
