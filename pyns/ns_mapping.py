@@ -54,7 +54,7 @@ class NSmapping:
                 raise ValueError("the third parameter of the constructor method must contain a list of codomain values")
             if values != None:
                 if len(values) != card_domain:
-                    raise ValueError("the number of values passed does not coincide with the cardinality of the declared domain")
+                    raise IndexError("the number of values passed does not coincide with the cardinality of the declared domain")
                 # controlla che tra i values non ci siano elementi estranei al codominio
                 values_set = set(values)
                 codomain_set = set(codomain.get())
@@ -63,7 +63,7 @@ class NSmapping:
                 for i in range(card_domain):
                     map[domain.get()[i]] = values[i]
         else:
-            raise ValueError("the number of parameters do not match those of the constructor method")
+            raise IndexError("the number of parameters do not match those of the constructor method")
         self.__domain = domain
         self.__codomain = codomain
         self.__map = map

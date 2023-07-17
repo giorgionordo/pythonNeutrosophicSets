@@ -156,8 +156,10 @@ class NSset:
 
     #------------------------------------
 
+
+    # metodo privato che restituisce l-i-esimo (i=0,1,2) grado dell'elemento u
     def __getDegree(self, u, i):
-        """ returns the i-th degree of a given element of the current neutrosophic set
+        """ private method that returns the i-th degree (for i=0,1,2) of a given element of the current neutrosophic set
             i = 0 : membership
             i = 1 : indeterminacy
             i = 2 : non-membership
@@ -166,6 +168,9 @@ class NSset:
         if u not in self.getUniverse():
             raise IndexError('non-existent element')
         return self.__neutrosophicset[u][i]
+
+
+    #------------------------------------
 
 
     # restituisce il grado di appartenenza
@@ -178,10 +183,6 @@ class NSset:
         ----
         Returns: degree of membership of u
         """
-        # u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
-        # if u not in self.getUniverse():
-        #     raise IndexError('non-existent element')
-        # return self.__neutrosophicset[u][0]
         return self.__getDegree(u, 0)
 
 
@@ -195,10 +196,6 @@ class NSset:
         ----
         Returns: degree of indeterminacy of u
         """
-        # u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
-        # if u not in self.getUniverse():
-        #     raise IndexError('non-existent element')
-        # return self.__neutrosophicset[u][1]
         return self.__getDegree(u, 1)
 
 
@@ -212,10 +209,6 @@ class NSset:
         ----
         Returns: degree of non-membership of u
         """
-        # u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
-        # if u not in self.getUniverse():
-        #     raise IndexError('non-existent element')
-        # return self.__neutrosophicset[u][2]
         return self.__getDegree(u, 2)
 
     #------------------------------------------------------------------------------------
@@ -325,8 +318,7 @@ class NSset:
             (muA, sigmaA, omegaA) = self.getElement(e)
             (muB, sigmaB, omegaB) = nset.getElement(e)
             #----
-            (muC, sigmaC, omegaC) = (max(muA, muB), max(sigmaA, sigmaB), min(omegaA, omegaB))
-            triple = [muC, sigmaC, omegaC]
+            triple = [max(muA, muB), max(sigmaA, sigmaB), min(omegaA, omegaB)]   # muC, sigmaC, omegaC
             C.setElement(e, triple)
         return C
 
@@ -346,8 +338,7 @@ class NSset:
             (muA, sigmaA, omegaA) = self.getElement(e)
             (muB, sigmaB, omegaB) = nset.getElement(e)
             #----
-            (muC, sigmaC, omegaC) = (min(muA, muB), min(sigmaA, sigmaB), max(omegaA, omegaB))
-            triple = [muC, sigmaC, omegaC]
+            triple = [min(muA, muB), min(sigmaA, sigmaB), max(omegaA, omegaB)]  # muC, sigmaC, omegaC
             C.setElement(e, triple)
         return C
 
@@ -362,8 +353,7 @@ class NSset:
         for e in self.getUniverse():
             (muA, sigmaA, omegaA) = self.getElement(e)
             #----
-            (muC, sigmaC, omegaC) = (omegaA, 1 - sigmaA, muA)
-            triple = [muC, sigmaC, omegaC]
+            triple = [omegaA, 1 - sigmaA, muA]    # muC, sigmaC, omegaC
             C.setElement(e, triple)
         return C
 
@@ -383,8 +373,7 @@ class NSset:
             (muA, sigmaA, omegaA) = self.getElement(e)
             (muB, sigmaB, omegaB) = nset.getElement(e)
             #----
-            (muC, sigmaC, omegaC) = (min(muA, omegaB), min(sigmaA, 1 - sigmaB), max(omegaA, muB))
-            triple = [muC, sigmaC, omegaC]
+            triple = [min(muA, omegaB), min(sigmaA, 1 - sigmaB), max(omegaA, muB)] # muC, sigmaC, omegaC
             C.setElement(e, triple)
         return C
 
@@ -394,31 +383,43 @@ class NSset:
 
     # operatore unione (+) con overloading sul metodo __add__
     def __add__(self, nset):
+        """ neutrosophic union
+        """
         return self.NSunion(nset)
 
 
     # operatore intersezione (&) con overloading sul metodo __and__
     def __and__(self, nset):
+        """ neutrosophic intersection
+        """
         return self.NSintersection(nset)
 
 
     # operatore complementare (~ = tilde) con overloading sul metodo __invert__
     def __invert__(self):
+        """ neutrosophic complement
+        """
         return self.NScomplement()
 
 
     # operatore differenza (-) con overloading sul metodo __sub__
     def __sub__(self, nset):
+        """ neutrosophic difference
+        """
         return self.NSdifference(nset)
 
 
     # operatore sottoinsieme (<=) con overloading sul metodo __le__
     def __le__(self, nset):
+        """ neutrosophic subset
+        """
         return self.isNSsubset(nset)
 
 
     # operatore sovrainsieme (>=) con overloading sul metodo __ge__
     def __ge__(self, nset):
+        """ neutrosophic superset
+        """
         return self.isNSsuperset(nset)
 
 
@@ -445,7 +446,7 @@ class NSset:
         """ Method that returns the neutrosophic set in string format for the user.
         ----
         Returns: string containing a table representing the degree of membership, indeterminacy and
-        non-membership of every element of the neutrosophic set
+                 non-membership of every element of the neutrosophic set
         """
         dashes = "-"*64
         s = "\n            |   membership   |  indeterminacy | non-membership |\n" + dashes + "\n"
