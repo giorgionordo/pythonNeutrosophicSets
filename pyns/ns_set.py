@@ -318,7 +318,7 @@ class NSset:
             (muA, sigmaA, omegaA) = self.getElement(e)
             (muB, sigmaB, omegaB) = nset.getElement(e)
             #----
-            triple = [max(muA, muB), max(sigmaA, sigmaB), min(omegaA, omegaB)]   # muC, sigmaC, omegaC
+            triple = [max(muA, muB), max(sigmaA, sigmaB), min(omegaA, omegaB)]   # i.e. (muC, sigmaC, omegaC)
             C.setElement(e, triple)
         return C
 
@@ -338,7 +338,7 @@ class NSset:
             (muA, sigmaA, omegaA) = self.getElement(e)
             (muB, sigmaB, omegaB) = nset.getElement(e)
             #----
-            triple = [min(muA, muB), min(sigmaA, sigmaB), max(omegaA, omegaB)]  # muC, sigmaC, omegaC
+            triple = [min(muA, muB), min(sigmaA, sigmaB), max(omegaA, omegaB)]  # i.e. (muC, sigmaC, omegaC)
             C.setElement(e, triple)
         return C
 
@@ -353,7 +353,7 @@ class NSset:
         for e in self.getUniverse():
             (muA, sigmaA, omegaA) = self.getElement(e)
             #----
-            triple = [omegaA, 1 - sigmaA, muA]    # muC, sigmaC, omegaC
+            triple = [omegaA, 1 - sigmaA, muA]    # i.e. (muC, sigmaC, omegaC)
             C.setElement(e, triple)
         return C
 
@@ -373,7 +373,7 @@ class NSset:
             (muA, sigmaA, omegaA) = self.getElement(e)
             (muB, sigmaB, omegaB) = nset.getElement(e)
             #----
-            triple = [min(muA, omegaB), min(sigmaA, 1 - sigmaB), max(omegaA, muB)] # muC, sigmaC, omegaC
+            triple = [min(muA, omegaB), min(sigmaA, 1 - sigmaB), max(omegaA, muB)]   # i.e. (muC, sigmaC, omegaC)
             C.setElement(e, triple)
         return C
 

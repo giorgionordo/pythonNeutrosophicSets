@@ -221,8 +221,7 @@ class NSmapping:
                     mu_values.append(nset.getMembership(u))
                     sigma_values.append(nset.getIndeterminacy(u))
                     omega_values.append(nset.getNonMembership(u))
-                (mu, sigma, omega) = (max(mu_values), max(sigma_values), min(omega_values))
-            triple = (mu, sigma, omega)
+                triple = [max(mu_values), max(sigma_values), min(omega_values)]  # i.e. (mu, sigma, omega)
             result.setElement(v, triple)
         return result
 
@@ -240,8 +239,8 @@ class NSmapping:
         result = NSset(self.__domain)
         for u in self.getDomain():
             valore = self.getValue(u)
-            tripla = nset.getElement(valore)   # i.e. (mu, sigma, omega)
-            result.setElement(u, tripla)
+            triple = nset.getElement(valore)   # i.e. (mu, sigma, omega)
+            result.setElement(u, triple)
         return result
 
     # ------------------------------------------------------------------------------------
