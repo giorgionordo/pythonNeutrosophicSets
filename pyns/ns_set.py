@@ -154,6 +154,19 @@ class NSset:
             raise IndexError('non-existent element')
         return self.__neutrosophicset[u]
 
+    #------------------------------------
+
+    def __getDegree(self, u, i):
+        """ returns the i-th degree of a given element of the current neutrosophic set
+            i = 0 : membership
+            i = 1 : indeterminacy
+            i = 2 : non-membership
+        """
+        u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
+        if u not in self.getUniverse():
+            raise IndexError('non-existent element')
+        return self.__neutrosophicset[u][i]
+
 
     # restituisce il grado di appartenenza
     def getMembership(self, u):
@@ -165,10 +178,11 @@ class NSset:
         ----
         Returns: degree of membership of u
         """
-        u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
-        if u not in self.getUniverse():
-            raise IndexError('non-existent element')
-        return self.__neutrosophicset[u][0]
+        # u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
+        # if u not in self.getUniverse():
+        #     raise IndexError('non-existent element')
+        # return self.__neutrosophicset[u][0]
+        return self.__getDegree(u, 0)
 
 
     # restituisce il grado di indeterminazione
@@ -181,10 +195,11 @@ class NSset:
         ----
         Returns: degree of indeterminacy of u
         """
-        u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
-        if u not in self.getUniverse():
-            raise IndexError('non-existent element')
-        return self.__neutrosophicset[u][1]
+        # u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
+        # if u not in self.getUniverse():
+        #     raise IndexError('non-existent element')
+        # return self.__neutrosophicset[u][1]
+        return self.__getDegree(u, 1)
 
 
     # restituisce il grado di non appartenenza
@@ -197,10 +212,11 @@ class NSset:
         ----
         Returns: degree of non-membership of u
         """
-        u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
-        if u not in self.getUniverse():
-            raise IndexError('non-existent element')
-        return self.__neutrosophicset[u][2]
+        # u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
+        # if u not in self.getUniverse():
+        #     raise IndexError('non-existent element')
+        # return self.__neutrosophicset[u][2]
+        return self.__getDegree(u, 2)
 
     #------------------------------------------------------------------------------------
 
@@ -310,8 +326,8 @@ class NSset:
             (muB, sigmaB, omegaB) = nset.getElement(e)
             #----
             (muC, sigmaC, omegaC) = (max(muA, muB), max(sigmaA, sigmaB), min(omegaA, omegaB))
-            tripla = [muC, sigmaC, omegaC]
-            C.setElement(e, tripla)
+            triple = [muC, sigmaC, omegaC]
+            C.setElement(e, triple)
         return C
 
 
@@ -331,8 +347,8 @@ class NSset:
             (muB, sigmaB, omegaB) = nset.getElement(e)
             #----
             (muC, sigmaC, omegaC) = (min(muA, muB), min(sigmaA, sigmaB), max(omegaA, omegaB))
-            tripla = [muC, sigmaC, omegaC]
-            C.setElement(e, tripla)
+            triple = [muC, sigmaC, omegaC]
+            C.setElement(e, triple)
         return C
 
 
@@ -347,8 +363,8 @@ class NSset:
             (muA, sigmaA, omegaA) = self.getElement(e)
             #----
             (muC, sigmaC, omegaC) = (omegaA, 1 - sigmaA, muA)
-            tripla = [muC, sigmaC, omegaC]
-            C.setElement(e, tripla)
+            triple = [muC, sigmaC, omegaC]
+            C.setElement(e, triple)
         return C
 
 
@@ -368,8 +384,8 @@ class NSset:
             (muB, sigmaB, omegaB) = nset.getElement(e)
             #----
             (muC, sigmaC, omegaC) = (min(muA, omegaB), min(sigmaA, 1 - sigmaB), max(omegaA, muB))
-            tripla = [muC, sigmaC, omegaC]
-            C.setElement(e, tripla)
+            triple = [muC, sigmaC, omegaC]
+            C.setElement(e, triple)
         return C
 
 
