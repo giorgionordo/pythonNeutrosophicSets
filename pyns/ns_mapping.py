@@ -212,7 +212,7 @@ class NSmapping:
         for v in self.getCodomain():
             fibre = self.getFibre(v)
             if fibre == []:
-                (mu, sigma, omega) = (1,1,0)
+                triple = [1,1,0]
             else:
                 mu_values = list()
                 sigma_values = list()
@@ -238,8 +238,8 @@ class NSmapping:
         """
         result = NSset(self.__domain)
         for u in self.getDomain():
-            valore = self.getValue(u)
-            triple = nset.getElement(valore)   # i.e. (mu, sigma, omega)
+            value = self.getValue(u)
+            triple = nset.getElement(value)   # i.e. (mu, sigma, omega)
             result.setElement(u, triple)
         return result
 
