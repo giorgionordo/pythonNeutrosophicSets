@@ -71,43 +71,26 @@ class NSset:
 
     #------------------------------------------------------------------------------------
 
-    # assegna la tripla di appartenenza, indeterminatezza e non appartenenza ad un elemento
-    def setElement(self, u, triple):
+    # metodo privato che assegna l'i-esimo (i=0,1,2) grado dell'elemento u
+    def __setDegree(self, u, i, r):
+        """ private method that assigns the value r to the i-th degree (for i=0,1,2) of a given element
+        of the current neutrosophic set.
+            i = 0 : membership
+            i = 1 : indeterminacy
+            i = 2 : non-membership
         """
-        Assign simultaneously the membership, indeterminacy and non-membership degree
-        to a specific element of the neutrosophic set.
-        ----
-        Parameters:
-        - u: element of the universe
-        - triple: string, list or tuple of membership, indeterminacy and non-membership degree
-        """
-        u = str(u)   # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
+        u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
             raise IndexError('non-existent element')
-        if type(triple) == str:   # se il parametro è una stringa lo converte in lista
-            sostituz = { "(":"", ")":"", ",":" ", ";":" " }
-            for k in sostituz:
-                triple = triple.replace(k, sostituz[k])
-            triple = triple.split()
-        else:
-            triple = list(triple)   # converte in lista in caso fosse una tupla
-        if len(triple) != 3:
-            raise ValueError('error in the number of parameters passed')
-        triple = [float(e) for e in triple]
-        (mu, sigma, omega) = triple
-        if not (0 <= mu <= 1):
-            raise ValueError("incompatible membership degree value")
-        if not (0 <= sigma <= 1):
-            raise ValueError("incompatible indeterminacy degree value")
-        if not (0 <= omega <= 1):
-            raise ValueError("incompatible non-membership degree value")
-        # assert 0 <= mu <= 1
-        # assert 0 <= sigma <= 1
-        # assert 0 <= omega <= 1
-        self.__neutrosophicset[u] = triple
+        degreename = ["membership", "indeterminacy", "non-membership"]
+        r = float(r)
+        if not (0 <= r <= 1):
+            raise ValueError(f"incompatible {degreename[i]} degree value")
+        self.__neutrosophicset[u][i] = r
 
 
     #------------------------------------------------------------------------------------
+
 
     # assegna il grado di appartenenza ad un elemento
     def setMembership(self, u, mu):
@@ -118,13 +101,7 @@ class NSset:
         - u: element of the universe
         - mu: value of the membership degree
         """
-        u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
-        if u not in self.getUniverse():
-            raise IndexError('non-existent element')
-        mu = float(mu)
-        if not (0 <= mu <= 1):
-            raise ValueError("incompatible membership degree value")
-        self.__neutrosophicset[u][0] = mu
+        self.__setDegree(u, 0, mu)
 
 
     # assegna il grado di indeterminatezza ad un elemento
@@ -136,13 +113,7 @@ class NSset:
         - u: element of the universe
         - sigma: value of the indeterminacy degree
         """
-        u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
-        if u not in self.getUniverse():
-            raise IndexError('non-existent element')
-        sigma = float(sigma)
-        if not (0 <= sigma <= 1):
-            raise ValueError("incompatible indeterminacy degree value")
-        self.__neutrosophicset[u][1] = sigma
+        self.__setDegree(u, 1, sigma)
 
 
     # assegna il grado di non appartenenza ad un elemento
@@ -154,14 +125,32 @@ class NSset:
         - u: element of the universe
         - omega: value of the non membership degree
         """
-        u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
-        if u not in self.getUniverse():
-            raise IndexError('non-existent element')
-        omega = float(omega)
-        if not (0 <= omega <= 1):
-            raise ValueError("incompatible non-membership degree value")
-        self.__neutrosophicset[u][2] = omega
+        self.__setDegree(u, 2, omega)
 
+    #------------------------------------------------------------------------------------
+
+    # assegna la tripla di appartenenza, indeterminatezza e non appartenenza ad un elemento
+    def setElement(self, u, triple):
+        """
+        Assign simultaneously the membership, indeterminacy and non-membership degree
+        to a specific element of the neutrosophic set.
+        ----
+        Parameters:
+        - u: element of the universe
+        - triple: string, list or tuple of membership, indeterminacy and non-membership degree
+        """
+        if type(triple) == str:   # se il parametro è una stringa lo converte in lista
+            sostituz = { "(":"", ")":"", ",":" ", ";":" " }
+            for k in sostituz:
+                triple = triple.replace(k, sostituz[k])
+            triple = triple.split()
+        else:
+            triple = list(triple)   # converte in lista in caso fosse una tupla
+        if len(triple) != 3:
+            raise ValueError('error in the number of parameters passed')
+        triple = [float(e) for e in triple]   # i.e. (mu, sigma, omega)
+        for i in range(3):
+            self.__setDegree(u, i, triple[i])
 
     #------------------------------------------------------------------------------------
 
