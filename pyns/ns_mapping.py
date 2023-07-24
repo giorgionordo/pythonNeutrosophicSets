@@ -64,6 +64,7 @@ class NSmapping:
                     map[domain.get()[i]] = values[i]
         else:
             raise IndexError("the number of parameters do not match those of the constructor method")
+        # memorizza i valori ottenuti nelle proprietà dell'oggetto
         self.__domain = domain
         self.__codomain = codomain
         self.__map = map

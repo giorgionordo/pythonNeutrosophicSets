@@ -1,4 +1,7 @@
 from pyns.ns_universe import NSuniverse
+#----
+from re import findall
+from ast import literal_eval
 
 class NSset:
     """
@@ -9,25 +12,60 @@ class NSset:
     """
 
     # costruttore
-    def __init__(self, element):
+    def __init__(self, *args):
         """
         Generic constructor of an empty neutrosophic set defined over a universe
         or copied by another object neutrosophic set.
         ----
         Parameters:
-        - elemento: element on which the neutrosophic set is defined
-          (can be a universe set or a neutrosophic set object to be copied)
+        - args: generic argument which can be an element referable to an object together universe
+                (list, tuple, string, list of values, universe set object)
+                or a pair constituted by an element attributable to a universe set
+                and a list of tuples of real values representing the membership degrees of the various elements
         """
-        neutrosophicset = dict()    # dizionario di liste che contiene i values dell'insieme neutrosofico
+        neutrosophicset = dict()    # dizionario di liste che contiene i valori dell'insieme neutrosofico
         #--------------------
-        if type(element) == NSuniverse:   # viene passato un universo e generato un insieme neutrosofico vuoto
-            universe = element
-            for e in element.get():
-                neutrosophicset[e] = [0,0,1]   # lista di tre elementi corrispondenti a appartenenza, indeterminatezza, non appartenenza
-        elif type(element) == NSset:    # viene copiato un oggetto insieme neutrosofico
-            universe = element.getUniverse()
-            for e in universe:
-                neutrosophicset[e] = element.getElement(e)
+        length = len(args)
+        if length == 1:
+            element = args[0]
+            if type(element) in [list, tuple, str, NSuniverse]:   # viene passato un oggetto riconducibile a universo e generato un insieme neutrosofico vuoto
+                universe = NSuniverse(element)   # altri tipi vengono convertiti in oggetto universo
+                for e in universe.get():
+                    neutrosophicset[e] = [0,0,1]  # lista di tre elementi corrispondenti a appartenenza, indeterminatezza, non appartenenza
+            elif type(element) == NSset:
+                universe = element.getUniverse() # viene copiato un oggetto insieme neutrosofico
+                for e in universe:
+                    neutrosophicset[e] = element.getElement(e)
+            else:
+                raise ValueError("value not compatible with the type universe set")
+        elif length == 2:
+            # ricava i due parametri (insieme universo e lista dei valori)
+            nset = NSset(args[0])  # utilizza lo stesso costruttore
+            universe = nset.getUniverse()  # preleva l'insieme universo
+            values = args[1]   # preleva la lista dei valori
+            if type(values) not in [list, tuple, str]:
+                raise ValueError("the second parameter must contain a list of triples of real numbers")
+            if type(values) != str and len(values) != len(universe):
+                raise IndexError("the number of value triples does not correspond with the number of elements")
+            # tratta il caso in cui il secondo parametro è una stringa
+            if type(values) == str:   # preleva le triple (liste o tuple) dalla stringa fornita come secondo parametro
+                pattern = r'\[.*?\]|\(.*?\)'   # usa le espressioni regolari per isolare le triple
+                str_list = findall(pattern, values)   # usa il modulo ast per convertire le strutture
+                tpl_list = [tuple(literal_eval(s)) for s in str_list]
+                nset = NSset(universe,tpl_list)  # utilizza lo stesso costruttore
+                neutrosophicset = nset.get()
+            else:   # tratta il caso in cui il secondo parametro è una lista o una tupla
+                i = 0
+                for e in universe:
+                    t = values[i]  # prende la tripla della lista corrispondente all'elemento e secondo lo stesso ordine
+                    i += 1
+                    if type(t) not in [tuple,list] or len(t) !=3:
+                        raise IndexError("il secondo parametro deve contenere solo triple")
+                    t = [float(t[j]) for j in range(3)]
+                    neutrosophicset[e] = t
+        else:
+            raise IndexError("the number of parameters do not match those of the constructor method")
+        # memorizza i valori ottenuti nelle proprietà dell'oggetto
         self.__universe = NSuniverse(universe)
         self.__neutrosophicset = neutrosophicset
 
@@ -127,7 +165,6 @@ class NSset:
 
     #------------------------------------------------------------------------------------
 
-
     # metodo che restituisce l'universo come lista
     def getUniverse(self):
         """
@@ -136,6 +173,13 @@ class NSset:
         Returns: list of the elements of the universe
         """
         return self.__universe.get()
+
+
+    # metodo che restituisce l'intero insieme neutrosofico come dizionario
+    def get(self):
+        """ method that returns the dictionary containg the degrees of each element
+        """
+        return self.__neutrosophicset
 
 
     # restituisce la lista dei gradi di appartenenza, indeterminazione e non appartenenza
@@ -159,7 +203,8 @@ class NSset:
 
     # metodo privato che restituisce l-i-esimo (i=0,1,2) grado dell'elemento u
     def __getDegree(self, u, i):
-        """ private method that returns the i-th degree (for i=0,1,2) of a given element of the current neutrosophic set
+        """ private method that returns the i-th degree (for i=0,1,2) of a given element
+        of the current neutrosophic set.
             i = 0 : membership
             i = 1 : indeterminacy
             i = 2 : non-membership

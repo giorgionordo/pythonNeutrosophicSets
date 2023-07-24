@@ -34,6 +34,7 @@ class NSuniverse:
         elif length > 1:   # se la lunghezza è maggiore di 1
             for i in range(length):
                 universe.append(str(args[i]))
+        # memorizza il valore ottenuto nella proprietà dell'oggetto
         self.__universe = universe
 
 
