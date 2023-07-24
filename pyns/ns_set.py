@@ -41,10 +41,10 @@ class NSset:
         elif length == 2:
             # ricava i due parametri (insieme universo e lista dei valori)
             nset = NSset(args[0])  # utilizza lo stesso costruttore
-            universe = nset.getUniverse()  # preleva l'insieme universo
+            universe = nset.getUniverse()  # preleva l'insieme universo come lista
             values = args[1]   # preleva la lista dei valori
             if type(values) not in [list, tuple, str]:
-                raise ValueError("the second parameter must contain a list of triples of real numbers")
+                raise ValueError("the second parameter of the constructor method must contain a list of triples of real numbers")
             if type(values) != str and len(values) != len(universe):
                 raise IndexError("the number of value triples does not correspond with the number of elements")
             # tratta il caso in cui il secondo parametro è una stringa
@@ -55,19 +55,19 @@ class NSset:
                 nset = NSset(universe,tpl_list)  # utilizza lo stesso costruttore
                 neutrosophicset = nset.get()
             else:   # tratta il caso in cui il secondo parametro è una lista o una tupla
-                i = 0
-                for e in universe:
+                for i in range(len(universe)):
+                    elem = universe[i]
                     t = values[i]  # prende la tripla della lista corrispondente all'elemento e secondo lo stesso ordine
-                    i += 1
                     if type(t) not in [tuple,list] or len(t) !=3:
-                        raise IndexError("il secondo parametro deve contenere solo triple")
+                        raise IndexError("the second parameter of the constructor method must contain only triple")
                     t = [float(t[j]) for j in range(3)]
-                    neutrosophicset[e] = t
+                    neutrosophicset[elem] = t
         else:
             raise IndexError("the number of parameters do not match those of the constructor method")
         # memorizza i valori ottenuti nelle proprietà dell'oggetto
         self.__universe = NSuniverse(universe)
         self.__neutrosophicset = neutrosophicset
+
 
     #------------------------------------------------------------------------------------
 
@@ -256,7 +256,9 @@ class NSset:
         """
         return self.__getDegree(u, 2)
 
+
     #------------------------------------------------------------------------------------
+
 
     # pone l'insieme neutrosofico uguale all'insieme neutrosofico vuoto
     def setEmpty(self):
@@ -314,6 +316,19 @@ class NSset:
         Returns: True if the current neutrosophic set neutrosofically contains the second one
         """
         return nset.isNSsubset(self)
+
+
+    #------------------------------------------------------------------------------------
+
+
+    # metodo che restituisce la cardinalità (il numero di elementi) dell'insieme neutrosofico
+    def cardinality(self):
+        """
+        Method that returns the cardinality (the number of elements) of the neutrosophic set
+        ----
+        Returns: the number of elements of the current neurosophic set
+        """
+        return self.__universe.cardinality()
 
 
     #------------------------------------------------------------------------------------

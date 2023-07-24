@@ -53,9 +53,9 @@ class NSuniverse:
     # metodo che restituisce la cardinalità (il numero di elementi) dell'universo
     def cardinality(self):
         """
-        Method that returns the cardinality (the number of elements) of the universe
+        Method that returns the cardinality (the number of elements) of the universe set
         ----
-        Returns: the number of elements of the current universe
+        Returns: the number of elements of the current universe set
         """
         return len(self.__universe)
 
