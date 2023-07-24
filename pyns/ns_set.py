@@ -79,7 +79,7 @@ class NSset:
         ----
         Parameters:
         - u: element of the universe
-        - tripla: string, list or tuple of membership, indeterminacy and non-membership degree
+        - triple: string, list or tuple of membership, indeterminacy and non-membership degree
         """
         u = str(u)   # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
