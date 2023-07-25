@@ -252,9 +252,9 @@ class NSmapping:
         ----
         Returns: string containing a map of the current mapping
         """
-        s = "\n"
+        s = f"\n {str(self.__domain):>28}   ->   {str(self.__codomain):<28}\n"+"-"*64+"\n"
         for e in self.__map:
-            s += f" {e:>10}  |->  {self.__map[e]:<10}\n"
+            s += f" {e:>28}  |->  {self.__map[e]:<28}\n"
         return s
 
 

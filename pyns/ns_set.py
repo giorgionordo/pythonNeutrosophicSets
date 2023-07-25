@@ -73,7 +73,7 @@ class NSset:
 
     # metodo privato che assegna l'i-esimo (i=0,1,2) grado dell'elemento u
     def __setDegree(self, u, i, r):
-        """ private method that assigns the value r to the i-th degree (for i=0,1,2) of a given element
+        """ private method that assigns the value r to the i-th degree (for i=0,1,2) of a given element u
         of the current neutrosophic set.
             i = 0 : membership
             i = 1 : indeterminacy
@@ -139,6 +139,7 @@ class NSset:
         - u: element of the universe
         - triple: string, list or tuple of membership, indeterminacy and non-membership degree
         """
+
         if type(triple) == str:   # se il parametro è una stringa lo converte in lista
             sostituz = { "(":"", ")":"", ",":" ", ";":" " }
             for k in sostituz:

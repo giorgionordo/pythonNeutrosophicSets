@@ -18,9 +18,13 @@ class NSuniverse:
         universe = list()   # lista di stringhe
         #--------------------
         length = len(args)
-        if length == 1:
+        if length == 0:
+            raise IndexError("the universe set must contain at least an element")
+        elif length == 1:
             elem = args[0]
-            if type(elem) in [list, tuple]:
+            if type(elem) == set:
+                raise ValueError("type set is not suitable because the elements of the universe set must be assigned in a specific order")
+            elif type(elem) in [list, tuple]:
                 universe = [str(e) for e in elem]
             elif type(elem) == NSuniverse:
                 universe = elem.get()
@@ -30,7 +34,7 @@ class NSuniverse:
                 for k in sostituz:
                     elem = elem.replace(k, sostituz[k])
                 universe = elem.split()
-            else:
+            else:  # se si tratta di un solo elemento non di tipo stringa
                 universe = [str(elem)]
         elif length > 1:   # se la lunghezza è maggiore di 1
             for i in range(length):
