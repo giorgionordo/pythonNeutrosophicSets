@@ -270,6 +270,19 @@ class NSset:
 
     #------------------------------------------------------------------------------------
 
+
+    # metodo che restituisce la cardinalità (il numero di elementi) dell'insieme neutrosofico
+    def cardinality(self):
+        """
+        Method that returns the cardinality (the number of elements) of the neutrosophic set
+        ----
+        Returns: the number of elements of the current neurosophic set
+        """
+        return self.__universe.cardinality()
+
+
+    #------------------------------------------------------------------------------------
+
     # restituisce true se l'insieme neutrosofico corrente è contenuto in quello
     # passato come parametro
     def isNSsubset(self, nset):
@@ -306,49 +319,6 @@ class NSset:
         Returns: True if the current neutrosophic set neutrosofically contains the second one
         """
         return nset.isNSsubset(self)
-
-
-    #------------------------------------------------------------------------------------
-
-
-    # metodo che restituisce la cardinalità (il numero di elementi) dell'insieme neutrosofico
-    def cardinality(self):
-        """
-        Method that returns the cardinality (the number of elements) of the neutrosophic set
-        ----
-        Returns: the number of elements of the current neurosophic set
-        """
-        return self.__universe.cardinality()
-
-
-    #------------------------------------------------------------------------------------
-
-    # confronta due insiemi neutrosofici col metodo speciale __eq__
-    # sovraccaricando l'operatore di uguaglianza == e restituisce True se sono uguali
-    def __eq__(self, nsins):
-        """ Checks if the current NS set is equal to another one.
-        ----
-        Parameters:
-        - nset second neutrosophic set
-        ----
-        Returns: True if the current neutrosophic set neutrosofically coincides with the second one
-        """
-        equal = self.isNSsubset(nsins) and nsins.isNSsubset(self)
-        return equal
-
-
-    # confronta due insiemi neutrosofici col metodo speciale __ne__
-    # sovraccaricando l'operatore di non uguaglianza != e restituisce True se sono diversi
-    def __ne__(self, nset):
-        """ Checks if the current NS set is different from another one.
-        ----
-        Parameters:
-        - nset second neutrosophic set
-        ----
-        Returns: True if the current neutrosophic set neutrosofically is different from the second one
-        """
-        different = not (self == nset)
-        return different
 
 
     #------------------------------------------------------------------------------------
@@ -430,6 +400,49 @@ class NSset:
 
     #------------------------------------------------------------------------------------
 
+    # verifica se un insieme neutrosofico è disgiunto da un altro
+    def isNSdisjoint(self, nset):
+        """ Checks if the current set is neutrosophically disjoint with the second one
+        passed as parameter.
+        ----
+        Parameters:
+        - nset second neutrosophic set
+        Returns: True if the current neutrosophic set is neutrosophically disjoint from the second one
+        """
+        nsempty = NSset(self.__universe)  # prepare the empty neutrosophic set
+        disjoint = self.NSintersection(nset) == nsempty
+        return disjoint
+
+
+    #------------------------------------------------------------------------------------
+
+    # confronta due insiemi neutrosofici col metodo speciale __eq__
+    # sovraccaricando l'operatore di uguaglianza == e restituisce True se sono uguali
+    def __eq__(self, nsins):
+        """ Checks if the current NS set is equal to another one.
+        ----
+        Parameters:
+        - nset second neutrosophic set
+        ----
+        Returns: True if the current neutrosophic set neutrosofically coincides with the second one
+        """
+        equal = self.isNSsubset(nsins) and nsins.isNSsubset(self)
+        return equal
+
+
+    # confronta due insiemi neutrosofici col metodo speciale __ne__
+    # sovraccaricando l'operatore di non uguaglianza != e restituisce True se sono diversi
+    def __ne__(self, nset):
+        """ Checks if the current NS set is different from another one.
+        ----
+        Parameters:
+        - nset second neutrosophic set
+        ----
+        Returns: True if the current neutrosophic set neutrosofically is different from the second one
+        """
+        different = not (self == nset)
+        return different
+
 
     # operatore unione (+) con overloading sul metodo __add__
     def __add__(self, nset):
@@ -472,21 +485,6 @@ class NSset:
         """
         return self.isNSsuperset(nset)
 
-
-    #------------------------------------------------------------------------------------
-
-    # verifica se un insieme neutrosofico è disgiunto da un altro
-    def isNSdisjoint(self, nset):
-        """ Checks if the current set is neutrosophically disjoint with the second one
-        passed as parameter.
-        ----
-        Parameters:
-        - nset second neutrosophic set
-        Returns: True if the current neutrosophic set is neutrosophically disjoint from the second one
-        """
-        nsempty = NSset(self.__universe)  # prepare the empty neutrosophic set
-        disjoint = self.NSintersection(nset) == nsempty
-        return disjoint
 
     #------------------------------------------------------------------------------------
 
