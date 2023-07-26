@@ -73,11 +73,13 @@ class NSset:
 
     # metodo privato che assegna l'i-esimo (i=0,1,2) grado dell'elemento u
     def __setDegree(self, u, i, r):
-        """ private method that assigns the value r to the i-th degree (for i=0,1,2) of a given element u
+        """ private method that returns the i-th degree (for i=0,1,2) of a given element
         of the current neutrosophic set.
-            i = 0 : membership
-            i = 1 : indeterminacy
-            i = 2 : non-membership
+        ----
+        Parameters:
+        - u: element of the universe
+        - i: index of the degree (i=0: membership, i=1: indeterminacy, i=2: non-membership
+        . r: value of the i-th degree
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
@@ -195,9 +197,12 @@ class NSset:
     def __getDegree(self, u, i):
         """ private method that returns the i-th degree (for i=0,1,2) of a given element
         of the current neutrosophic set.
-            i = 0 : membership
-            i = 1 : indeterminacy
-            i = 2 : non-membership
+        ----
+        Parameters:
+        - u: element of the universe
+        - i: index of the degree (i=0: membership, i=1: indeterminacy, i=2: non-membership
+        ----
+        Returns: i-th degree of u
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
