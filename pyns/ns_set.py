@@ -295,6 +295,8 @@ class NSset:
         Returns: True if the current neutrosophic set is neutrosofically contained in the second one
         """
         if self.getUniverse() != nset.getUniverse():
+            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
+        if self.getUniverse() != nset.getUniverse():
             return False
         else:
             result = True
@@ -318,6 +320,8 @@ class NSset:
         ----
         Returns: True if the current neutrosophic set neutrosofically contains the second one
         """
+        if self.getUniverse() != nset.getUniverse():
+            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
         return nset.isNSsubset(self)
 
 
@@ -333,6 +337,8 @@ class NSset:
         ----
         Returns: the neutrosophic union of the current neutrosophic set with the second one
         """
+        if self.getUniverse() != nset.getUniverse():
+            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
         C = NSset(self.__universe)
         for e in self.getUniverse():
             (muA, sigmaA, omegaA) = self.getElement(e)
@@ -353,6 +359,8 @@ class NSset:
         ----
         Returns: the neutrosophic intersection of the current neutrosophic set with the second one
         """
+        if self.getUniverse() != nset.getUniverse():
+            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
         C = NSset(self.__universe)
         for e in self.getUniverse():
             (muA, sigmaA, omegaA) = self.getElement(e)
@@ -388,6 +396,8 @@ class NSset:
         ----
         Returns: the neutrosophic difference of the current neutrosophic set with the second one
         """
+        if self.getUniverse() != nset.getUniverse():
+            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
         C = NSset(self.__universe)
         for e in self.getUniverse():
             (muA, sigmaA, omegaA) = self.getElement(e)
@@ -409,6 +419,8 @@ class NSset:
         - nset second neutrosophic set
         Returns: True if the current neutrosophic set is neutrosophically disjoint from the second one
         """
+        if self.getUniverse() != nset.getUniverse():
+            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
         nsempty = NSset(self.__universe)  # prepare the empty neutrosophic set
         disjoint = self.NSintersection(nset) == nsempty
         return disjoint
@@ -418,7 +430,7 @@ class NSset:
 
     # confronta due insiemi neutrosofici col metodo speciale __eq__
     # sovraccaricando l'operatore di uguaglianza == e restituisce True se sono uguali
-    def __eq__(self, nsins):
+    def __eq__(self, nset):
         """ Checks if the current NS set is equal to another one.
         ----
         Parameters:
@@ -426,7 +438,9 @@ class NSset:
         ----
         Returns: True if the current neutrosophic set neutrosofically coincides with the second one
         """
-        equal = self.isNSsubset(nsins) and nsins.isNSsubset(self)
+        if self.getUniverse() != nset.getUniverse():
+            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
+        equal = self.isNSsubset(nset) and nset.isNSsubset(self)
         return equal
 
 
@@ -440,9 +454,13 @@ class NSset:
         ----
         Returns: True if the current neutrosophic set neutrosofically is different from the second one
         """
+        if self.getUniverse() != nset.getUniverse():
+            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
         different = not (self == nset)
         return different
 
+
+    #--------------------------
 
     # operatore unione (+) con overloading sul metodo __add__
     def __add__(self, nset):
