@@ -327,6 +327,29 @@ class NSset:
 
     #------------------------------------------------------------------------------------
 
+    # metodo privato per operazione generica su oggetti di tipo insieme neutrosofico
+    def __NSoperation(self, nset, fmu, fsigma, fomega):
+        """ private method that returns the neutrosophic operation of the current
+        neutrosophic set with the second one passed as parameter
+        by three functions applied to their membership, indeterminacy and non-membership degrees
+        Parameters:
+        - nset second neutrosophic set
+        - fmu, fsigma, fomega first, second and third function
+        ----
+        Returns: the neutrosophic operation of the current neutrosophic set with the second one by
+        applying f1, f2 and f3
+        """
+        if self.getUniverse() != nset.getUniverse():
+            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
+        C = NSset(self.__universe)
+        for e in self.getUniverse():
+            (muA, sigmaA, omegaA) = self.getElement(e)
+            (muB, sigmaB, omegaB) = nset.getElement(e)
+            #----
+            triple = [fmu(muA, muB), fsigma(sigmaA, sigmaB), fomega(omegaA, omegaB)]   # i.e. (muC, sigmaC, omegaC)
+            C.setElement(e, triple)
+        return C
+
     # unione neutrosofica
     def NSunion(self, nset):
         """ Calculates and returns the neutrosophic union of the current set with the second one
@@ -337,15 +360,7 @@ class NSset:
         ----
         Returns: the neutrosophic union of the current neutrosophic set with the second one
         """
-        if self.getUniverse() != nset.getUniverse():
-            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
-        C = NSset(self.__universe)
-        for e in self.getUniverse():
-            (muA, sigmaA, omegaA) = self.getElement(e)
-            (muB, sigmaB, omegaB) = nset.getElement(e)
-            #----
-            triple = [max(muA, muB), max(sigmaA, sigmaB), min(omegaA, omegaB)]   # i.e. (muC, sigmaC, omegaC)
-            C.setElement(e, triple)
+        C = self.__NSoperation(nset, max, max, min)
         return C
 
 
@@ -359,15 +374,7 @@ class NSset:
         ----
         Returns: the neutrosophic intersection of the current neutrosophic set with the second one
         """
-        if self.getUniverse() != nset.getUniverse():
-            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
-        C = NSset(self.__universe)
-        for e in self.getUniverse():
-            (muA, sigmaA, omegaA) = self.getElement(e)
-            (muB, sigmaB, omegaB) = nset.getElement(e)
-            #----
-            triple = [min(muA, muB), min(sigmaA, sigmaB), max(omegaA, omegaB)]  # i.e. (muC, sigmaC, omegaC)
-            C.setElement(e, triple)
+        C = self.__NSoperation(nset, min, min, max)
         return C
 
 
