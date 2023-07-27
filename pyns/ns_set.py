@@ -334,9 +334,9 @@ class NSset:
 
     # metodo privato per operazione generica su oggetti di tipo insieme neutrosofico
     def __NSoperation(self, nset, fm, fs, fo):
-        """ private method that returns the neutrosophic operation of the current
-        neutrosophic set with the second one passed as parameter
-        by three functions applied to their membership, indeterminacy and non-membership degrees
+        """ private method that returns the neutrosophic set obtained by applying the neutrosophic
+        operation of the current neutrosophic set with the second one passed as parameter
+        by three functions applied to their membership, indeterminacy and non-membership degrees respectively.
         Parameters:
         - nset second neutrosophic set
         - fm, fs, fo first, second and third function
@@ -346,6 +346,8 @@ class NSset:
         """
         if self.getUniverse() != nset.getUniverse():
             raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
+        if callable(fm) == False or callable(fs) == False or callable(fo) == False:
+            raise  ValueError("the last three parameters must be functions")
         C = NSset(self.__universe)
         for e in self.getUniverse():
             (muA, sigmaA, omegaA) = self.getElement(e)
