@@ -29,7 +29,7 @@ class NSuniverse:
             elif type(elem) == NSuniverse:
                 universe = elem.get()
             elif type(elem) == str:
-                sostituz = { "{":"", "}":"", "(":"", ")":"", "[":"", "]":"",
+                sostituz = { "{":"", "}":"", "[":"", "]":"", "(":"", ")":"",
                              ",":" ", ";":" " }
                 for k in sostituz:
                     elem = elem.replace(k, sostituz[k])

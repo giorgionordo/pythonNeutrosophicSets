@@ -43,10 +43,10 @@ class NSmapping:
             card_domain = domain.cardinality()
             for i in range(card_domain):      # prepara il dizionario vuoto (con le sole chiavi)
                 map[domain.get()[i]] = ''
-            if type(values) in [list, tuple]:
-                values = [str(e) for e in values]
-            elif type(values) == str:
-                sostituz = { "(":"", ")":"", ",":" ", ";":" " }
+            if type(values) in [list, tuple]:        # i valori vengono passati come lista o tupla
+                values = [str(e) for e in values]    # e convertiti in lista di stringhe
+            elif type(values) == str:             # i valori vengono passati dentro una stringa
+                sostituz = { "[":"", "]":"", "(":"", ")":"", ",":" ", ";":" " }
                 for k in sostituz:
                     values = values.replace(k, sostituz[k])
                 values = values.split()   # riduce a lista
