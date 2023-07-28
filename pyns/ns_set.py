@@ -386,6 +386,25 @@ class NSset:
         return C
 
 
+    #------------------------------------------------------------------------------------
+
+    # verifica se un insieme neutrosofico è disgiunto da un altro
+    def isNSdisjoint(self, nset):
+        """ Checks if the current set is neutrosophically disjoint with the second one
+        passed as parameter.
+        ----
+        Parameters:
+        - nset second neutrosophic set
+        Returns: True if the current neutrosophic set is neutrosophically disjoint from the second one
+        """
+        nsempty = NSset(self.__universe)  # prepare the empty neutrosophic set
+        disjoint = self.NSintersection(nset) == nsempty
+        return disjoint
+
+
+    #------------------------------------------------------------------------------------
+
+
     # complementare neutrosofico
     def NScomplement(self):
         """ Calculates and returns the neutrosophic complement of the current neutrosophic set.
@@ -421,24 +440,6 @@ class NSset:
             triple = [min(muA, omegaB), min(sigmaA, 1 - sigmaB), max(omegaA, muB)]   # i.e. (muC, sigmaC, omegaC)
             C.setElement(e, triple)
         return C
-
-
-    #------------------------------------------------------------------------------------
-
-    # verifica se un insieme neutrosofico è disgiunto da un altro
-    def isNSdisjoint(self, nset):
-        """ Checks if the current set is neutrosophically disjoint with the second one
-        passed as parameter.
-        ----
-        Parameters:
-        - nset second neutrosophic set
-        Returns: True if the current neutrosophic set is neutrosophically disjoint from the second one
-        """
-        if self.getUniverse() != nset.getUniverse():
-            raise ValueError("the two neutrosophic sets cannot be defined on different universe sets")
-        nsempty = NSset(self.__universe)  # prepare the empty neutrosophic set
-        disjoint = self.NSintersection(nset) == nsempty
-        return disjoint
 
 
     #------------------------------------------------------------------------------------

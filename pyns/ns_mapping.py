@@ -18,7 +18,7 @@ class NSmapping:
         - by passing another object mapping
         ----
         Parameters:
-        - args: generic argument; it can be a single parameter corresponding to an alread existent onject NSmapping
+        - args: generic argument; it can be a single parameter corresponding to an alread existent object NSmapping
                 or a triple of arguments representing respectively, the domain, codomain
                 and the list of function values expressed as strings, lists or tuples
         """
@@ -104,7 +104,7 @@ class NSmapping:
     # assegna il value mediante la funzione per uno specifico elemento
     def setValue(self, u, v):
         """
-        Assign a single value by the neutrosophic mapping to a specific element of the domain, i.e. f(u)=v
+        Assigns a single value by the neutrosophic mapping to a specific element of the domain, i.e. f(u)=v
         ----
         Parameters:
         - u: element of the domain
