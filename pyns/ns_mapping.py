@@ -1,5 +1,7 @@
 from pyns.ns_universe import NSuniverse
 from pyns.ns_set import NSset
+#----
+from ast import literal_eval
 
 class NSmapping:
     """
@@ -32,6 +34,30 @@ class NSmapping:
                 domain = args[0].getDomain()
                 codomain = args[0].getDomain()
                 map = args[0].getMap()
+            #-------------------------------------------------------
+            elif type(args[0]) == dict:   # se è un dizionario
+                map = args[0]
+                domain = NSuniverse(list(map.keys()))
+                codomain = NSuniverse(list(set(map.values())))  # elimina gli elementi ripetuti nei valori
+            elif type(args[0]) == str:    # se èun dizionario in formato stringa preleva gli elementi
+                values = args[0]
+                # se non ha formato dizionario con le graffe le aggiunge
+                if '{' not in values:
+                    values = '{' + values
+                if '}' not in values:
+                    values = values + '}'
+                # rimuove le parentesi delle coppie consente l'utilizzo alternativo di ; come separatore tra coppie
+                # e delle freccette come corrispondenza
+                sostituz = { "(":"", ")":"", ";":",", "->":':' }
+                for k in sostituz:
+                    values = values.replace(k, sostituz[k])
+                map_dict = literal_eval(values)
+                nsmap = NSmapping(map_dict)  # utilizza lo stesso costruttore per funzioni da dizionario
+                # ottiene dominio, codominio e mappa dall'aggetto NSmapping
+                domain = nsmap.getDomain()
+                codomain = nsmap.getCodomain()
+                map = nsmap.getMap()
+            #-------------------------------------------------------
             else:   # altrimenti solleva una eccezione
                 raise ValueError("the type or number of parameters do not match those of the constructor method")
         elif length == 3: # devono esserci tre parametri (dominio, codominio ed elenco valori)
@@ -78,7 +104,7 @@ class NSmapping:
         ----
         Returns: the universe set corresponding to the domain of the current mapping
         """
-        return self.__domain.get()
+        return NSuniverse(self.__domain.get())
 
 
     # restituisce il codominio della funzione
@@ -87,7 +113,7 @@ class NSmapping:
         ----
         Returns: the universe set corresponding to the codomain of the current mapping
         """
-        return self.__codomain.get()
+        return NSuniverse(self.__codomain.get())
 
 
     # restituisce le coppie elemento-value come dizionario
@@ -162,43 +188,6 @@ class NSmapping:
 
     # ------------------------------------------------------------------------------------
 
-    # confronta due funzioni col metodo speciale __eq__
-    # sovraccaricando l'operatore di uguaglianza == e restituisce True se sono uguali
-    def __eq__(self, g):
-        """ Checks if the current mapping is equal to another one.
-        ----
-        Parameters:
-        - g: second mapping
-        ----
-        Returns: True if the current mapping coincides with the second one
-        """
-        if self.getDomain() != g.getDomain() or self.getCodomain() != g.getCodomain():
-            return False
-        else:
-            equal = True
-            for e in self.getDomain():
-                if self.getValue(e) != g.getValue(e):
-                    equal = False
-                    break
-            return equal
-
-
-    # confronta due funzioni col metodo speciale __ne__
-    # sovraccaricando l'operatore di non uguaglianza != e restituisce True se sono diversi
-    def __ne__(self, g):
-        """ Checks if the current mapping is different from another one.
-        ----
-        Parameters:
-        - g: second mapping
-        ----
-        Returns: True if the current mapping is different from the second one
-        """
-        different = not (self == g)
-        return different
-
-
-    # ------------------------------------------------------------------------------------
-
     # restituisce l'immagine di un insieme neutrosofico mediante una funzione
     def NSimage(self, nset):
         """
@@ -244,6 +233,45 @@ class NSmapping:
             result.setElement(u, triple)
         return result
 
+
+    # ------------------------------------------------------------------------------------
+
+
+    # confronta due funzioni col metodo speciale __eq__
+    # sovraccaricando l'operatore di uguaglianza == e restituisce True se sono uguali
+    def __eq__(self, g):
+        """ Checks if the current mapping is equal to another one.
+        ----
+        Parameters:
+        - g: second mapping
+        ----
+        Returns: True if the current mapping coincides with the second one
+        """
+        if self.getDomain() != g.getDomain() or self.getCodomain() != g.getCodomain():
+            return False
+        else:
+            equal = True
+            for e in self.getDomain():
+                if self.getValue(e) != g.getValue(e):
+                    equal = False
+                    break
+            return equal
+
+
+    # confronta due funzioni col metodo speciale __ne__
+    # sovraccaricando l'operatore di non uguaglianza != e restituisce True se sono diversi
+    def __ne__(self, g):
+        """ Checks if the current mapping is different from another one.
+        ----
+        Parameters:
+        - g: second mapping
+        ----
+        Returns: True if the current mapping is different from the second one
+        """
+        different = not (self == g)
+        return different
+
+
     # ------------------------------------------------------------------------------------
 
     # restituisce la funzione neutrosofica come stringa col metodo speciale __str__
@@ -252,9 +280,9 @@ class NSmapping:
         ----
         Returns: string containing a map of the current mapping
         """
-        unvwidth = 28
-        totwidth = unvwidth*2 + 8
-        s = f"\n {str(self.__domain):>{unvwidth}}   ->   {str(self.__codomain):<{unvwidth}}\n"+"-"*totwidth+"\n"
+        unvwidth = 28               # larghezza in colonne del dominio e del codominio
+        totwidth = unvwidth*2 + 8   # calcolo della larghezza totale
+        s = f"\n {self.getDomain():>{unvwidth}}   ->   {self.getCodomain():<{unvwidth}}\n" + "-" * totwidth + "\n"
         for e in self.__map:
             s += f" {e:>{unvwidth}}  |->  {self.__map[e]:<{unvwidth}}\n"
         return s

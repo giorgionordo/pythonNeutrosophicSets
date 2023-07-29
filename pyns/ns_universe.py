@@ -95,6 +95,28 @@ class NSuniverse:
 
     #------------------------------------------------------------------------------------
 
+    # iteratore di oggetti NSuniverse
+
+    # definisce l'iteratore per l'oggetto insieme universo azzerando l'indice
+    def __iter__(self):
+        """ Method that initializes iterator on elements of the current universe sets
+        """
+        self.__i = 0   # inizializza l'indice privato __i da usare come contatore
+        return self
+
+    # restituisce il prossimo elemento iterato dell'oggetto insieme universo
+    def __next__(self):
+        """ Method that returns the iterated element of the current universe set
+        ----
+        Returns: the element of index self.__i  of the universe set
+        """
+        if self.__i < len(self.__universe):    # se l'indice __i non eccede la lunghezza dell'insieme universo
+            elem = self.__universe[self.__i]  # preleva l'elemento di indice __i
+            self.__i +=1                       # incremente il contatore privato __i
+            return elem                        # e restituisce l'elemento
+        raise StopIteration                    # altrimenti interrompi l'iterazione
+
+    # ------------------------------------------------------------------------------------
 
     # restituisce l'universo come stringa col metodo speciale __str__
     def __str__(self):
@@ -105,6 +127,18 @@ class NSuniverse:
         list_string_elements = [str(e) for e in self.__universe]
         s = "{ " + ", ".join(list_string_elements) + " }"
         return s
+
+
+    # metodo privato per la stampa formattata
+    def __format__(self, spec):
+        """ Method that returns the formatted string according to a given specifier
+            provided as the second parameter.
+        ----
+        Returns: the formatted string according to the spec specifier
+        """
+        unvstr = str(self)
+        result = f"{unvstr:{spec}}"
+        return result
 
 
     # restituisce la rappresentazione universo come stringa col metodo speciale __repr__
