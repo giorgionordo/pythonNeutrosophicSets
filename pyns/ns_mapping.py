@@ -252,13 +252,15 @@ class NSmapping:
         ----
         Returns: string containing a map of the current mapping
         """
-        s = f"\n {str(self.__domain):>28}   ->   {str(self.__codomain):<28}\n"+"-"*64+"\n"
+        unvwidth = 28
+        totwidth = unvwidth*2 + 8
+        s = f"\n {str(self.__domain):>{unvwidth}}   ->   {str(self.__codomain):<{unvwidth}}\n"+"-"*totwidth+"\n"
         for e in self.__map:
-            s += f" {e:>28}  |->  {self.__map[e]:<28}\n"
+            s += f" {e:>{unvwidth}}  |->  {self.__map[e]:<{unvwidth}}\n"
         return s
 
 
-    # restituisce la rappresentazione funzione neurtosofica come stringa col metodo speciale __repr__
+    # restituisce la rappresentazione funzione neutrosofica come stringa col metodo speciale __repr__
     # che viene implicitamente utilizzata nelle altre classi
     def __repr__(self):
         """ Method that returns the mapping for other implementations
