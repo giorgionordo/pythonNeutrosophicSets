@@ -39,6 +39,10 @@ class NSuniverse:
         elif length > 1:   # se la lunghezza è maggiore di 1
             for i in range(length):
                 universe.append(str(args[i]))
+        # controlla che non siano stati assegnati elementi ripetuti
+        univset = set(universe)
+        if len(universe) != len(univset):
+            raise ValueError("the universe set cannot contain repeated elements")
         # memorizza il valore ottenuto nella proprietà dell'oggetto
         self.__universe = universe
 

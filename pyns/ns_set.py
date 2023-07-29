@@ -536,7 +536,7 @@ class NSset:
         """
         (dashes, elemwidth, valwidth) = ("-"*64, 10, 14)
         s = "\n            |   membership   |  indeterminacy | non-membership |\n" + dashes + "\n"
-        
+
         for e in self.getUniverse():
             (mu, sigma, omega) = self.getElement(e)
             s += f" {str(e):{elemwidth}} | {mu:{valwidth}} | {sigma:{valwidth}} | {omega:{valwidth}} |\n"
