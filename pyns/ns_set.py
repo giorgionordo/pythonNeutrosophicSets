@@ -11,6 +11,8 @@ class NSset:
     www.nordo.it   |  giorgio.nordo@unime.it
     """
 
+    degreename = ["membership", "indeterminacy", "non-membership"]   # variabile di classe
+
     # costruttore
     def __init__(self, *args):
         """
@@ -61,6 +63,9 @@ class NSset:
                     if type(t) not in [tuple,list] or len(t) !=3:
                         raise IndexError("the second parameter of the constructor method must contain only triple")
                     t = [float(t[j]) for j in range(3)]
+                    for j in range(3):   # controlla che i valori della tripla siano compatibili
+                        if not 0 <= t[j] <= 1:
+                            raise ValueError(f"incompatible {self.degreename[j]} degree value")
                     neutrosophicset[elem] = t
         else:
             raise IndexError("the number of parameters do not match those of the constructor method")
@@ -84,10 +89,9 @@ class NSset:
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
             raise IndexError('non-existent element')
-        degreename = ["membership", "indeterminacy", "non-membership"]
         r = float(r)
         if not (0 <= r <= 1):
-            raise ValueError(f"incompatible {degreename[i]} degree value")
+            raise ValueError(f"incompatible {self.degreename[i]} degree value")
         self.__neutrosophicset[u][i] = r
 
 
@@ -530,13 +534,15 @@ class NSset:
         Returns: string containing a table representing the degree of membership, indeterminacy and
                  non-membership of every element of the neutrosophic set
         """
-        dashes = "-"*64
+        (dashes, elemwidth, valwidth) = ("-"*64, 10, 14)
         s = "\n            |   membership   |  indeterminacy | non-membership |\n" + dashes + "\n"
+        
         for e in self.getUniverse():
             (mu, sigma, omega) = self.getElement(e)
-            s += f" {str(e):10} | {mu:14} | {sigma:14} | {omega:14} |\n"
+            s += f" {str(e):{elemwidth}} | {mu:{valwidth}} | {sigma:{valwidth}} | {omega:{valwidth}} |\n"
         s += dashes + "\n"
         return s
+
 
 
     # restituisce la rappresentazione insieme neutrosofico come stringa col metodo speciale __repr__
