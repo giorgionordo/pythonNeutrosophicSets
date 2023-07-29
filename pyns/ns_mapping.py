@@ -1,10 +1,12 @@
 from pyns.ns_universe import NSuniverse
 from pyns.ns_set import NSset
 #----
+from .ns_util import NSreplace
 from ast import literal_eval
 
 class NSmapping:
     """
+    Package Python Neutrosophic Sets (PYNS)
     Class that defines a mapping between two universes of neutrosophic sets
     ----------------------------------------------------------------------------------
     author: Giorgio Nordo - Dipartimento MIFT, Università di Messina, Italy
@@ -39,18 +41,31 @@ class NSmapping:
                 map = args[0]
                 domain = NSuniverse(list(map.keys()))
                 codomain = NSuniverse(list(set(map.values())))  # elimina gli elementi ripetuti nei valori
-            elif type(args[0]) == str:    # se èun dizionario in formato stringa preleva gli elementi
+            elif type(args[0]) == str:    # se è un dizionario in formato stringa preleva gli elementi
                 values = args[0]
-                # se non ha formato dizionario con le graffe le aggiunge
+                # rimuove apici e virgolette nonché le parentesi delle coppie e consente l'utilizzo
+                # alternativo di ; come separatore tra coppie e delle freccette come corrispondenza
+                # ottenendo sempre una stringa contenente una sequenza di coppie chiave:valore separate da ,
+                sostituz = { "'":"", '"':"", "(":"", ")":"", "[":"", "]":"",
+                             "{":"", "}":"", " ":",", ";":",", ",,":",", "->":':' }
+                values = NSreplace(values, sostituz)
+                # avendo rimosso le stringhe (e i delimitatori) trasforma prima le chiavi in formato stringa
+                if '"' not in values and "'" not in values:
+                    listcouples = values.split(',')  # spezza le coppie
+                    # elabora ciascuna coppia chiave-valore per costruire la nuova stringa
+                    listkeysvalues = []
+                    # ricrea la lista che rappresenta il dizionario ma con le stringhe
+                    for couple in listcouples:
+                        key, value = couple.split(':')
+                        keyvalue = "'" + key.strip() + "':'" + value.strip()+"'"
+                        listkeysvalues.append(keyvalue)
+                    values = ", ".join(listkeysvalues)  # ricrea la stringa con le coppie chiave:valore separate da ,
+                # aggiunge le graffe alla stringa per ottenere l'espressione del dizionario
                 if '{' not in values:
                     values = '{' + values
                 if '}' not in values:
                     values = values + '}'
-                # rimuove le parentesi delle coppie consente l'utilizzo alternativo di ; come separatore tra coppie
-                # e delle freccette come corrispondenza
-                sostituz = { "(":"", ")":"", ";":",", "->":':' }
-                for k in sostituz:
-                    values = values.replace(k, sostituz[k])
+                # trasforma la stringa in dizionario
                 map_dict = literal_eval(values)
                 nsmap = NSmapping(map_dict)  # utilizza lo stesso costruttore per funzioni da dizionario
                 # ottiene dominio, codominio e mappa dall'aggetto NSmapping
@@ -73,8 +88,7 @@ class NSmapping:
                 values = [str(e) for e in values]    # e convertiti in lista di stringhe
             elif type(values) == str:             # i valori vengono passati dentro una stringa
                 sostituz = { "[":"", "]":"", "(":"", ")":"", ",":" ", ";":" " }
-                for k in sostituz:
-                    values = values.replace(k, sostituz[k])
+                values = NSreplace(values, sostituz)
                 values = values.split()   # riduce a lista
             else:
                 raise ValueError("the third parameter of the constructor method must contain a list of codomain values")

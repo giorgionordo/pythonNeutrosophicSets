@@ -1,10 +1,12 @@
 from pyns.ns_universe import NSuniverse
 #----
+from .ns_util import NSreplace
 from re import findall
 from ast import literal_eval
 
 class NSset:
     """
+    Package Python Neutrosophic Sets (PYNS)
     Class that defines a neutrosophic set over a given universe
     ----------------------------------------------------------------------------------
     author: Giorgio Nordo - Dipartimento MIFT. Università di Messina, Italy
@@ -148,8 +150,7 @@ class NSset:
 
         if type(triple) == str:   # se il parametro è una stringa lo converte in lista
             sostituz = { "(":"", ")":"", ",":" ", ";":" " }
-            for k in sostituz:
-                triple = triple.replace(k, sostituz[k])
+            triple = NSreplace(triple, sostituz)
             triple = triple.split()
         else:
             triple = list(triple)   # converte in lista in caso fosse una tupla

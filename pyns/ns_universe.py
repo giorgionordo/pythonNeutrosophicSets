@@ -1,5 +1,8 @@
+from .ns_util import NSreplace
+
 class NSuniverse:
     """
+    Package Python Neutrosophic Sets (PYNS)
     Class defining a universe set for neutrosophic sets
     ----------------------------------------------------------------------------------
     author: Giorgio Nordo - Dipartimento MIFT, Università di Messina, Italy
@@ -31,8 +34,7 @@ class NSuniverse:
             elif type(elem) == str:
                 sostituz = { "{":"", "}":"", "[":"", "]":"", "(":"", ")":"",
                              ",":" ", ";":" " }
-                for k in sostituz:
-                    elem = elem.replace(k, sostituz[k])
+                elem = NSreplace(elem, sostituz)
                 universe = elem.split()
             else:  # se si tratta di un solo elemento non di tipo stringa
                 universe = [str(elem)]
@@ -99,7 +101,7 @@ class NSuniverse:
 
     # definisce l'iteratore per l'oggetto insieme universo azzerando l'indice
     def __iter__(self):
-        """ Method that initializes iterator on elements of the current universe sets
+        """ Method that initializes iterator on elements of the current universe set
         """
         self.__i = 0   # inizializza l'indice privato __i da usare come contatore
         return self
