@@ -1,4 +1,4 @@
-from pyns.ns_universe import NSuniverse
+from .ns_universe import NSuniverse
 #----
 from .ns_util import NSreplace
 from re import findall
@@ -56,7 +56,7 @@ class NSset:
                 pattern = r'\[.*?\]|\(.*?\)'   # usa le espressioni regolari per isolare le triple
                 str_list = findall(pattern, values)   # usa il modulo ast per convertire le strutture
                 tpl_list = [tuple(literal_eval(s)) for s in str_list]
-                nset = NSset(universe,tpl_list)  # utilizza lo stesso costruttore
+                nset = NSset(universe, tpl_list)  # utilizza lo stesso costruttore
                 neutrosophicset = nset.get()
             else:   # tratta il caso in cui il secondo parametro è una lista o una tupla
                 for i in range(len(universe)):

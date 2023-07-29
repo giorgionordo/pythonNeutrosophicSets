@@ -97,7 +97,7 @@ class NSuniverse:
 
     #------------------------------------------------------------------------------------
 
-    # iteratore di oggetti NSuniverse
+    #----------------- iteratore di oggetti NSuniverse
 
     # definisce l'iteratore per l'oggetto insieme universo azzerando l'indice
     def __iter__(self):
@@ -117,6 +117,7 @@ class NSuniverse:
             self.__i +=1                       # incremente il contatore privato __i
             return elem                        # e restituisce l'elemento
         raise StopIteration                    # altrimenti interrompi l'iterazione
+
 
     # ------------------------------------------------------------------------------------
 

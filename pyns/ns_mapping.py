@@ -1,7 +1,8 @@
-from pyns.ns_universe import NSuniverse
-from pyns.ns_set import NSset
-#----
+from .ns_universe import NSuniverse
+from .ns_set import NSset
+#--
 from .ns_util import NSreplace
+#----
 from ast import literal_eval
 
 class NSmapping:
