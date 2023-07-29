@@ -47,8 +47,8 @@ class NSmapping:
                 # rimuove apici e virgolette nonché le parentesi delle coppie e consente l'utilizzo
                 # alternativo di ; come separatore tra coppie e delle freccette come corrispondenza
                 # ottenendo sempre una stringa contenente una sequenza di coppie chiave:valore separate da ,
-                sostituz = { "'":"", '"':"", "(":"", ")":"", "[":"", "]":"",
-                             "{":"", "}":"", " ":",", ";":",", ",,":",", "->":':' }
+                sostituz = { "'":"", '"':"", "(":"", ")":"", "[":"", "]":"", "{":"", "}":"",
+                             " ":",", ";":",", ",,":",", "|->":":", "->":':' }
                 values = NSreplace(values, sostituz)
                 # avendo rimosso le stringhe (e i delimitatori) trasforma prima le chiavi in formato stringa
                 if '"' not in values and "'" not in values:
