@@ -1,13 +1,12 @@
 from .ns_universe import NSuniverse
 from .ns_set import NSset
 #--
-from .ns_util import NSreplace
-#----
-from ast import literal_eval
+from .ns_util import NSreplace, NSstringToDict, NSisStringExtDict
 
 class NSmapping:
     """
     Package Python Neutrosophic Sets (PYNS)
+    ns_mapping.py
     Class that defines a mapping between two universes of neutrosophic sets
     ----------------------------------------------------------------------------------
     author: Giorgio Nordo - Dipartimento MIFT, Università di Messina, Italy
@@ -23,77 +22,99 @@ class NSmapping:
         - by passing another object mapping
         ----
         Parameters:
-        - args: generic argument; it can be a single parameter corresponding to an alread existent object NSmapping
-                or a triple of arguments representing respectively, the domain, codomain
-                and the list of function values expressed as strings, lists or tuples
+        - args: generic argument; it can be a single parameter corresponding to:
+                - a dictionary element:obj
+                - a string with a list of correspondance element->obj, or
+                - an already existent object NSmapping
+                or a triple of arguments representing respectively:
+                - domain
+                - codomain, and
+                - the list of function values expressed as strings, lists or tuples
         """
         map = dict()
         #--------------------
         length = len(args)
         if length == 0:
             raise ValueError("constructor method must have at least one parameter")
-        elif length == 1:   # se c'è un solo argomento deve trattarsi di una funzione
-            if type(args[0]) == NSmapping:   # se è un oggetto NSmapping lo ricopia
+        #---------- un parametro ----------------------------------------------------------------------------------
+        elif length == 1:
+            if type(args[0]) == NSmapping:  # se è un oggetto NSmapping lo ricopia
                 domain = args[0].getDomain()
                 codomain = args[0].getDomain()
                 map = args[0].getMap()
-            #-------------------------------------------------------
-            elif type(args[0]) == dict:   # se è un dizionario
+            # -------------------------------------------------------
+            elif type(args[0]) == dict:  # se è un dizionario
                 map = args[0]
                 domain = NSuniverse(list(map.keys()))
                 codomain = NSuniverse(list(set(map.values())))  # elimina gli elementi ripetuti nei valori
-            elif type(args[0]) == str:    # se è un dizionario in formato stringa preleva gli elementi
-                values = args[0]
-                # rimuove apici e virgolette nonché le parentesi delle coppie e consente l'utilizzo
-                # alternativo di ; come separatore tra coppie e delle freccette come corrispondenza
-                # ottenendo sempre una stringa contenente una sequenza di coppie chiave:valore separate da ,
-                sostituz = { "'":"", '"':"", "(":"", ")":"", "[":"", "]":"", "{":"", "}":"",
-                             " ":",", ";":",", ",,":",", "|->":":", "->":':' }
-                values = NSreplace(values, sostituz)
-                # avendo rimosso le stringhe (e i delimitatori) trasforma prima le chiavi in formato stringa
-                if '"' not in values and "'" not in values:
-                    listcouples = values.split(',')  # spezza le coppie
-                    # elabora ciascuna coppia chiave-valore per costruire la nuova stringa
-                    listkeysvalues = []
-                    # ricrea la lista che rappresenta il dizionario ma con le stringhe
-                    for couple in listcouples:
-                        key, value = couple.split(':')
-                        keyvalue = "'" + key.strip() + "':'" + value.strip()+"'"
-                        listkeysvalues.append(keyvalue)
-                    values = ", ".join(listkeysvalues)  # ricrea la stringa con le coppie chiave:valore separate da ,
-                # aggiunge le graffe alla stringa per ottenere l'espressione del dizionario
-                if '{' not in values:
-                    values = '{' + values
-                if '}' not in values:
-                    values = values + '}'
-                # trasforma la stringa in dizionario
-                map_dict = literal_eval(values)
-                nsmap = NSmapping(map_dict)  # utilizza lo stesso costruttore per funzioni da dizionario
+            elif type(args[0]) == str:  # se è un dizionario esteso in formato stringa preleva gli elementi
+                map_dict = NSstringToDict(args[0])  # ottiene il dizionario dalla stringa
+                nsmap = NSmapping(map_dict)  # crea un oggetto NSmapping utilizzano lo stesso costruttore per funzioni passando il dizionario
                 # ottiene dominio, codominio e mappa dall'aggetto NSmapping
                 domain = nsmap.getDomain()
                 codomain = nsmap.getCodomain()
                 map = nsmap.getMap()
-            #-------------------------------------------------------
-            else:   # altrimenti solleva una eccezione
-                raise ValueError("the type or number of parameters do not match those of the constructor method")
-        elif length == 3: # devono esserci tre parametri (dominio, codominio ed elenco valori)
-            domain = NSuniverse(args[0])
-            codomain = NSuniverse(args[1])
+            # -------------------------------------------------------
+            else:  # altrimenti solleva una eccezione
+                raise ValueError("the type of the parameter do not match those of the constructor method")
+        #---------- tre parametri --------------------------------------------------------------------------------
+        elif length == 3:    # devono esserci tre parametri (dominio, codominio ed elenco valori)
+            # prova a convertire i primi due parametri in oggetti di tipo insieme universo
+            # ed intercetta eventuali eccezioni dal costruttore di NSuniverse
+            try:
+                domain = NSuniverse(args[0])
+            except:
+                raise ValueError("the first parameter of the constructor method must be a universe set")
+            #------
+            try:
+                codomain = NSuniverse(args[1])
+            except:
+                raise ValueError("the second parameter of the constructor method must be a universe set")
+            # al terzo parametro facciamo corrispondere i possibili valori che devono essere compatibili col dominio ed il codominio forniti
             values = args[2]
-            if type(domain) != NSuniverse or type(codomain) != NSuniverse:
-                raise ValueError("the first two parameters of the constructor method (domain and codomain) must be universe sets")
-            card_domain = domain.cardinality()
-            for i in range(card_domain):      # prepara il dizionario vuoto (con le sole chiavi)
-                map[domain.get()[i]] = ''
-            if type(values) in [list, tuple]:        # i valori vengono passati come lista o tupla
-                values = [str(e) for e in values]    # e convertiti in lista di stringhe
-            elif type(values) == str:             # i valori vengono passati dentro una stringa
-                sostituz = { "[":"", "]":"", "(":"", ")":"", ",":" ", ";":" " }
-                values = NSreplace(values, sostituz)
-                values = values.split()   # riduce a lista
-            else:
-                raise ValueError("the third parameter of the constructor method must contain a list of codomain values")
-            if values != None:
+            card_domain = domain.cardinality()   # calcola la cardinalità del dominio
+
+            # #----------- se i valori sono espressi come lista o tupla
+            # if type(values) in [list, tuple]:  # i valori vengono passati come lista o tupla
+            #     values = [str(e) for e in values]  # converti in lista di stringhe
+            #     # controlla che il numero di valori sia pari alla cardinalità del dominio
+            #     if len(values) != card_domain:
+            #         raise IndexError("the number of values passed does not coincide with the cardinality of the declared domain")
+            #     # controlla che i valori forniti siano contenuti nel codominio altrimenti solleva una eccezione
+            #     values_set = set(values)
+            #     codomain_set = set(codomain.get())
+            #     if not values_set.issubset(codomain_set):
+            #         raise ValueError("one or more values do not belong to the declared codomain")
+            #     # prepara l'associazione dei valori nel dizionario map
+            #     for i in range(card_domain):
+            #         map[domain.get()[i]] = values[i]
+
+            #----------- se i valori sono espressi come dizionario o in formato stringa dizionario esteso
+            if type(values)==dict or NSisStringExtDict(values)==True:
+                # ---- crea un oggetto di tipo NSmapping con lo stesso costruttore fornendo solo i valori
+                nsmap = NSmapping(values)
+                # ------------ effettua i controlli tra il dominio e il codominio forniti e quello dell'oggetto ottenuto
+                # verifica che il dominio della funzione ottenuta e quello dato coincidano
+                # (la funzione deve essere ovunque definita) altrimenti solleva una eccezione
+                if nsmap.getDomain() != domain:
+                    raise ValueError("the indicated domain is incompatible with the definition of the function")
+                # verifica che il codominio della funzione ottenuta sia contenuto in quello dato
+                # (l'immagine deve essere contenuta nell'insieme di arrivo) altrimenti solleva una eccezione
+                if nsmap.getCodomain().isSubset(codomain) == False:
+                    raise ValueError("the indicated codomain is incompatible with the definition of the function")
+                # se invece c'è compatibilità tra domini e codomini estrai il dizionario delle corrispondenze
+                map = nsmap.getMap()
+
+            #----------- i valori sono espressi come lista o tupla anche in formato stringa
+            # elif type(values) == str:
+            elif type(values) in [list, tuple, str]:
+                if type(values) in [list, tuple]:  # tratta il sottocaso liste o tuple
+                    values = [str(e) for e in values]  # converti in lista di stringhe
+                else:                    # tratta il sottocaso stringa contenente lista o tupla
+                    sostituz = {"[": "", "]": "", "(": "", ")": "", ",": " ", ";": " "}
+                    values = NSreplace(values, sostituz).split()  # sostituisce i valori e riduce a lista
+                #----------- operazioni comuni ai due casi
+                # controlla che il numero di valori sia pari alla cardinalità del dominio
                 if len(values) != card_domain:
                     raise IndexError("the number of values passed does not coincide with the cardinality of the declared domain")
                 # controlla che tra i values non ci siano elementi estranei al codominio
@@ -101,8 +122,14 @@ class NSmapping:
                 codomain_set = set(codomain.get())
                 if not values_set.issubset(codomain_set):
                     raise ValueError("one or more values do not belong to the declared codomain")
+                # procede col preparare l'associazione dei valori nel dizionario map
                 for i in range(card_domain):
                     map[domain.get()[i]] = values[i]
+
+            else:   # in tutti gli altri casi solleva una eccezione
+                raise ValueError("the third parameter of the constructor method must express a obj match")
+
+        # ---------- se non ci sono uno tre parametri solleva una eccezione --------------------------------------
         else:
             raise IndexError("the number of parameters do not match those of the constructor method")
         # memorizza i valori ottenuti nelle proprietà dell'oggetto
@@ -131,21 +158,21 @@ class NSmapping:
         return NSuniverse(self.__codomain.get())
 
 
-    # restituisce le coppie elemento-value come dizionario
+    # restituisce le coppie elemento-obj come dizionario
     def getMap(self):
-        """ Obtain all the element-value pair defining the mapping.
+        """ Obtain all the element-obj pair defining the mapping.
         ----
-        Returns: the dictionary containing the element-value pairs of the mapping
+        Returns: the dictionary containing the element-obj pairs of the mapping
         """
         return self.__map
 
 
     # ------------------------------------------------------------------------------------
 
-    # assegna il value mediante la funzione per uno specifico elemento
+    # assegna il obj mediante la funzione per uno specifico elemento
     def setValue(self, u, v):
         """
-        Assigns a single value by the neutrosophic mapping to a specific element of the domain, i.e. f(u)=v
+        Assigns a single obj by the neutrosophic mapping to a specific element of the domain, i.e. f(u)=v
         ----
         Parameters:
         - u: element of the domain
@@ -162,15 +189,15 @@ class NSmapping:
 
     # ------------------------------------------------------------------------------------
 
-    # ottiene il value mediante la funzione di un determinato elemento del dominio
+    # ottiene il obj mediante la funzione di un determinato elemento del dominio
     def getValue(self, u):
         """
-        Get the value by the neutrosophic mapping of a specific element of the domain.
+        Get the obj by the neutrosophic mapping of a specific element of the domain.
         ----
         Parameters:
         - e: element of the domain
         ----
-        Returns: the value of u by the current mapping
+        Returns: the obj of u by the current mapping
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.__domain.get():

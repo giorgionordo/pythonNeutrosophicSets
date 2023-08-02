@@ -3,6 +3,7 @@ from .ns_util import NSreplace
 class NSuniverse:
     """
     Package Python Neutrosophic Sets (PYNS)
+    ns_universe.py
     Class defining a universe set for neutrosophic sets
     ----------------------------------------------------------------------------------
     author: Giorgio Nordo - Dipartimento MIFT, Università di Messina, Italy
@@ -25,20 +26,19 @@ class NSuniverse:
             raise IndexError("the universe set must contain at least an element")
         elif length == 1:
             elem = args[0]
-            if type(elem) == set:
-                raise ValueError("type set is not suitable because the elements of the universe set must be assigned in a specific order")
-            elif type(elem) in [list, tuple]:
+            if type(elem) in [list, tuple]:
                 universe = [str(e) for e in elem]
             elif type(elem) == NSuniverse:
                 universe = elem.get()
             elif type(elem) == str:
                 sostituz = { "{":"", "}":"", "[":"", "]":"", "(":"", ")":"",
                              ",":" ", ";":" " }
-                elem = NSreplace(elem, sostituz)
-                universe = elem.split()
+                universe = NSreplace(elem, sostituz).split()
+            elif type(elem) == set:
+                raise ValueError("type set is not suitable because the elements of the universe set must be assigned in a specific order")
             else:  # se si tratta di un solo elemento non di tipo stringa
                 universe = [str(elem)]
-        elif length > 1:   # se la lunghezza è maggiore di 1
+        else:   # se la lunghezza è maggiore di 1
             for i in range(length):
                 universe.append(str(args[i]))
         # controlla che non siano stati assegnati elementi ripetuti
@@ -70,6 +70,23 @@ class NSuniverse:
         """
         return len(self.__universe)
 
+    #------------------------------------------------------------------------------------
+
+    # restituisce True se l'insieme universo corrente è contenuto in quello
+    # passato come parametro
+    def isSubset(self, unv):
+        """
+        Checks if the current universe set is contained in the second one passed as parameter.
+        ----
+        Parameters:
+        - unv: second universe set
+        ----
+        Returns: True if the current universe set is contained in the second one
+        """
+        setself = set(self.get())
+        setunv = set(unv.get())
+        result = setself.issubset(setunv)
+        return result
 
     #------------------------------------------------------------------------------------
 
@@ -132,7 +149,7 @@ class NSuniverse:
         return s
 
 
-    # metodo privato per la stampa formattata
+    # metodo speciale per la stampa formattata
     def __format__(self, spec):
         """ Method that returns the formatted string according to a given specifier
             provided as the second parameter.

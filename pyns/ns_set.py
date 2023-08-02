@@ -1,19 +1,20 @@
 from .ns_universe import NSuniverse
 #----
-from .ns_util import NSreplace
-from re import findall
-from ast import literal_eval
+from .ns_util import NSreplace, NSStringtoTriplesList, NSsplitText
 
 class NSset:
     """
     Package Python Neutrosophic Sets (PYNS)
+    ns_set.py
     Class that defines a neutrosophic set over a given universe
     ----------------------------------------------------------------------------------
     author: Giorgio Nordo - Dipartimento MIFT. Università di Messina, Italy
     www.nordo.it   |  giorgio.nordo@unime.it
     """
 
-    degreename = ["membership", "indeterminacy", "non-membership"]   # variabile di classe
+    #------------------ variabili di classe
+    degreename = ["membership", "indeterminacy", "non-membership"]   # nomi dei gradi
+    reprmaxlength = 64   # massima lunghezza in caratteri della stampa semplificata di un NS-set
 
     # costruttore
     def __init__(self, *args):
@@ -41,34 +42,33 @@ class NSset:
                 for e in universe:
                     neutrosophicset[e] = element.getElement(e)
             else:
-                raise ValueError("value not compatible with the type universe set")
+                raise ValueError("obj not compatible with the type universe set")
         elif length == 2:
             # ricava i due parametri (insieme universo e lista dei valori)
             nset = NSset(args[0])  # utilizza lo stesso costruttore
             universe = nset.getUniverse()  # preleva l'insieme universo come lista
             values = args[1]   # preleva la lista dei valori
-            if type(values) not in [list, tuple, str]:
-                raise ValueError("the second parameter of the constructor method must contain a list of triples of real numbers")
-            if type(values) != str and len(values) != len(universe):
-                raise IndexError("the number of value triples does not correspond with the number of elements")
-            # tratta il caso in cui il secondo parametro è una stringa
-            if type(values) == str:   # preleva le triple (liste o tuple) dalla stringa fornita come secondo parametro
-                pattern = r'\[.*?\]|\(.*?\)'   # usa le espressioni regolari per isolare le triple
-                str_list = findall(pattern, values)   # usa il modulo ast per convertire le strutture
-                tpl_list = [tuple(literal_eval(s)) for s in str_list]
-                nset = NSset(universe, tpl_list)  # utilizza lo stesso costruttore
-                neutrosophicset = nset.get()
-            else:   # tratta il caso in cui il secondo parametro è una lista o una tupla
+            # ---- tratta il caso in cui il secondo parametro è una lista o una tupla
+            if type(values) in [list ,tuple]:
+                if len(values) != len(universe):
+                    raise IndexError("the number of obj triples does not correspond with the number of elements")
                 for i in range(len(universe)):
                     elem = universe[i]
-                    t = values[i]  # prende la tripla della lista corrispondente all'elemento e secondo lo stesso ordine
+                    t = values[i]  # prende la tripla della lista corrispondente all'elemento secondo lo stesso ordine
                     if type(t) not in [tuple,list] or len(t) !=3:
                         raise IndexError("the second parameter of the constructor method must contain only triple")
                     t = [float(t[j]) for j in range(3)]
                     for j in range(3):   # controlla che i valori della tripla siano compatibili
                         if not 0 <= t[j] <= 1:
-                            raise ValueError(f"incompatible {self.degreename[j]} degree value")
+                            raise ValueError(f"incompatible {self.degreename[j]} degree obj")
                     neutrosophicset[elem] = t
+            # ---- tratta il caso in cui il secondo parametro è una stringa
+            elif type(values) == str:   # preleva le triple (liste o tuple) dalla stringa fornita come secondo parametro
+                tpl_list = NSStringtoTriplesList(values)
+                nset = NSset(universe, tpl_list)  # utilizza lo stesso costruttore
+                neutrosophicset = nset.get()
+            else:
+                raise ValueError("the second parameter of the constructor method must contain a list of triples of real numbers")
         else:
             raise IndexError("the number of parameters do not match those of the constructor method")
         # memorizza i valori ottenuti nelle proprietà dell'oggetto
@@ -86,14 +86,14 @@ class NSset:
         Parameters:
         - u: element of the universe
         - i: index of the degree (i=0: membership, i=1: indeterminacy, i=2: non-membership
-        . r: value of the i-th degree
+        . r: obj of the i-th degree
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
             raise IndexError('non-existent element')
         r = float(r)
         if not (0 <= r <= 1):
-            raise ValueError(f"incompatible {self.degreename[i]} degree value")
+            raise ValueError(f"incompatible {self.degreename[i]} degree obj")
         self.__neutrosophicset[u][i] = r
 
 
@@ -107,7 +107,7 @@ class NSset:
         ----
         Parameters:
         - u: element of the universe
-        - mu: value of the membership degree
+        - mu: obj of the membership degree
         """
         self.__setDegree(u, 0, mu)
 
@@ -119,7 +119,7 @@ class NSset:
         ----
         Parameters:
         - u: element of the universe
-        - sigma: value of the indeterminacy degree
+        - sigma: obj of the indeterminacy degree
         """
         self.__setDegree(u, 1, sigma)
 
@@ -131,7 +131,7 @@ class NSset:
         ----
         Parameters:
         - u: element of the universe
-        - omega: value of the non membership degree
+        - omega: obj of the non membership degree
         """
         self.__setDegree(u, 2, omega)
 
@@ -150,8 +150,7 @@ class NSset:
 
         if type(triple) == str:   # se il parametro è una stringa lo converte in lista
             sostituz = { "(":"", ")":"", ",":" ", ";":" " }
-            triple = NSreplace(triple, sostituz)
-            triple = triple.split()
+            triple = NSreplace(triple, sostituz).split()
         else:
             triple = list(triple)   # converte in lista in caso fosse una tupla
         if len(triple) != 3:
@@ -293,11 +292,11 @@ class NSset:
 
     #------------------------------------------------------------------------------------
 
-    # restituisce true se l'insieme neutrosofico corrente è contenuto in quello
+    # restituisce True se l'insieme neutrosofico corrente è contenuto in quello
     # passato come parametro
     def isNSsubset(self, nset):
         """
-        Checks if the current NS set is contained in the second one passed as parameter.
+        Checks if the current NS-set is contained in the second one passed as parameter.
         ----
         Parameters:
         - nset: second neutrosophic set
@@ -319,11 +318,11 @@ class NSset:
             return result
 
 
-    # restituisce true se l'insieme neutrosofico corrente contiene in quello
+    # restituisce True se l'insieme neutrosofico corrente contiene in quello
     # passato come parametro
     def isNSsuperset(self, nset):
         """
-        Checks if the current NS set contains the second one passed as parameter.
+        Checks if the current NS-set contains the second one passed as parameter.
         ----
         Parameters:
         - nset second neutrosophic set
@@ -529,21 +528,53 @@ class NSset:
 
 
     # restituisce l'insieme neutrosofico come stringa col metodo speciale __str__
-    def __str__(self):
+    def __str__(self, tabularFormat=False):
         """ Method that returns the neutrosophic set in string format for the user.
+        ----
+        Parameters:
+        - tabularFormat: boolean value:
+          * se è falsa il metodo restituisce la rappresentazione testuale in formato semplificato
+          * se è vera il metodo restituisce la rappresentazione testuale in forma tabulare
         ----
         Returns: string containing a table representing the degree of membership, indeterminacy and
                  non-membership of every element of the neutrosophic set
         """
-        (dashes, elemwidth, valwidth) = ("-"*64, 10, 14)
-        s = "\n            |   membership   |  indeterminacy | non-membership |\n" + dashes + "\n"
-
-        for e in self.getUniverse():
-            (mu, sigma, omega) = self.getElement(e)
-            s += f" {str(e):{elemwidth}} | {mu:{valwidth}} | {sigma:{valwidth}} | {omega:{valwidth}} |\n"
-        s += dashes + "\n"
+        if tabularFormat == True:
+            # stampa in formato tabulare
+            (dashes, elemwidth, valwidth) = ("-"*64, 10, 14)
+            s = "\n            |   membership   |  indeterminacy | non-membership |\n" + dashes + "\n"
+            for e in self.getUniverse():
+                (mu, sigma, omega) = self.getElement(e)
+                s += f" {str(e):{elemwidth}} | {mu:{valwidth}} | {sigma:{valwidth}} | {omega:{valwidth}} |\n"
+            s += dashes + "\n"
+        else:
+            # stampa in formato semplificato
+            elems = []
+            for e in self.getUniverse():
+                (mu, sigma, omega) = self.getElement(e)
+                elems.append(f"{e}/({mu},{sigma},{omega})")
+            s = "{ " + ", ".join(elems) + " }"
+            s = NSsplitText(s, self.reprmaxlength)
         return s
 
+
+    # metodo privato per la stampa formattata
+    def __format__(self, spec):
+        """ Method that returns the formatted string according to a given specifier
+            provided as the second parameter.
+        ----
+        Parameters:
+        - spec: stringa di formattazione:
+          * ":s" (default value) : simple format
+          * ":t" : tabular format
+        ----
+        Returns: the formatted string according to the spec specifier
+        """
+        if spec == "t":    # formattazione tabulare
+            result = self.__str__(tabularFormat=True)
+        else:                 # formattazione semplificata
+            result = self.__str__(tabularFormat=False)
+        return result
 
 
     # restituisce la rappresentazione insieme neutrosofico come stringa col metodo speciale __repr__
