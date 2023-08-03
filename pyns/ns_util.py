@@ -27,9 +27,9 @@ def NSreplace(text, sostituz):
 
 
 # converte una stringa in una tripla di liste
-def NSStringtoTriplesList(text):
+def NSstringToTriplesList(text):
     """
-    Converte una stringa contenente una lista di tuple nella corrispondente struttura
+    Converts a string containing a list of tuples to the corresponding data structure
     ----
     Parameters:
     - text: string
@@ -39,6 +39,21 @@ def NSStringtoTriplesList(text):
     str_list = findall(pattern, text)  # usa il modulo ast per convertire le strutture
     tpl_list = [tuple(literal_eval(s)) for s in str_list]
     return tpl_list
+
+
+# restituisce True se il valore è una stringa che rappresenta un dizionario esteso (con :, -> o |->)
+def NSisExtDict(obj):
+    """
+    Checks if the passed parameter is a string expressing an extended dictionary
+    ----
+    Parameters:
+    - obj: a generic object
+    Returns: a boolean obj equals true if obj is an extended dictionary
+    """
+    result = False
+    if type(obj) == str:
+        result = (":" in obj) or ("->" in obj)
+    return result
 
 
 # converte una stringa in un dizionario corrispondente
@@ -66,25 +81,10 @@ def NSstringToDict(text):
     return diz
 
 
-# restituisce True se il valore è una stringa che rappresenta un dizionario esteso (con :, -> o |->)
-def NSisStringExtDict(obj):
-    """
-    Checks if the passed parameter is a string expressing an extended dictionary
-    ----
-    Parameters:
-    - obj: a generic object
-    Returns: a boolean obj equals true if obj is an extended dictionary
-    """
-    result = False
-    if type(obj) == str:
-        result = (":" in obj) or ("->" in obj)
-    return result
-
-
 # divide il testo in linee di lunghezza massima max_length
 def NSsplitText(text, max_length):
     """
-    Returns text broken into multiple lines of a predetermined maximum length.
+    Returns the text broken into multiple lines of a predetermined maximum length.
     ----
     Parameters:
     - text: string to split

@@ -1,7 +1,7 @@
 from .ns_universe import NSuniverse
 from .ns_set import NSset
 #--
-from .ns_util import NSreplace, NSstringToDict, NSisStringExtDict
+from .ns_util import NSreplace, NSstringToDict, NSisExtDict
 
 class NSmapping:
     """
@@ -74,23 +74,8 @@ class NSmapping:
             values = args[2]
             card_domain = domain.cardinality()   # calcola la cardinalità del dominio
 
-            # #----------- se i valori sono espressi come lista o tupla
-            # if type(values) in [list, tuple]:  # i valori vengono passati come lista o tupla
-            #     values = [str(e) for e in values]  # converti in lista di stringhe
-            #     # controlla che il numero di valori sia pari alla cardinalità del dominio
-            #     if len(values) != card_domain:
-            #         raise IndexError("the number of values passed does not coincide with the cardinality of the declared domain")
-            #     # controlla che i valori forniti siano contenuti nel codominio altrimenti solleva una eccezione
-            #     values_set = set(values)
-            #     codomain_set = set(codomain.get())
-            #     if not values_set.issubset(codomain_set):
-            #         raise ValueError("one or more values do not belong to the declared codomain")
-            #     # prepara l'associazione dei valori nel dizionario map
-            #     for i in range(card_domain):
-            #         map[domain.get()[i]] = values[i]
-
             #----------- se i valori sono espressi come dizionario o in formato stringa dizionario esteso
-            if type(values)==dict or NSisStringExtDict(values)==True:
+            if type(values)==dict or NSisExtDict(values)==True:
                 # ---- crea un oggetto di tipo NSmapping con lo stesso costruttore fornendo solo i valori
                 nsmap = NSmapping(values)
                 # ------------ effettua i controlli tra il dominio e il codominio forniti e quello dell'oggetto ottenuto
@@ -106,7 +91,6 @@ class NSmapping:
                 map = nsmap.getMap()
 
             #----------- i valori sono espressi come lista o tupla anche in formato stringa
-            # elif type(values) == str:
             elif type(values) in [list, tuple, str]:
                 if type(values) in [list, tuple]:  # tratta il sottocaso liste o tuple
                     values = [str(e) for e in values]  # converti in lista di stringhe

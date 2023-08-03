@@ -1,6 +1,6 @@
 from .ns_universe import NSuniverse
 #----
-from .ns_util import NSreplace, NSStringtoTriplesList, NSsplitText
+from .ns_util import NSreplace, NSstringToTriplesList, NSsplitText
 
 class NSset:
     """
@@ -64,7 +64,7 @@ class NSset:
                     neutrosophicset[elem] = t
             # ---- tratta il caso in cui il secondo parametro è una stringa
             elif type(values) == str:   # preleva le triple (liste o tuple) dalla stringa fornita come secondo parametro
-                tpl_list = NSStringtoTriplesList(values)
+                tpl_list = NSstringToTriplesList(values)
                 nset = NSset(universe, tpl_list)  # utilizza lo stesso costruttore
                 neutrosophicset = nset.get()
             else:
@@ -553,7 +553,7 @@ class NSset:
             for e in self.getUniverse():
                 (mu, sigma, omega) = self.getElement(e)
                 elems.append(f"{e}/({mu},{sigma},{omega})")
-            s = "{ " + ", ".join(elems) + " }"
+            s = "< " + ", ".join(elems) + " >"
             s = NSsplitText(s, self.reprmaxlength)
         return s
 
