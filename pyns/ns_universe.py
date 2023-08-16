@@ -97,7 +97,7 @@ class NSuniverse:
         ----
         Returns: True if the universes are equal
         """
-        equal = (self.__universe == unv.get())
+        equal = (self.get() == unv.get())
         return equal
 
 

@@ -90,7 +90,7 @@ class NSset:
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('non-existent element')
+            raise IndexError("non-existent element")
         r = float(r)
         if not (0 <= r <= 1):
             raise ValueError(f"incompatible {self.degreename[i]} degree obj")
@@ -154,7 +154,7 @@ class NSset:
         else:
             triple = list(triple)   # converte in lista in caso fosse una tupla
         if len(triple) != 3:
-            raise ValueError('error in the number of parameters passed')
+            raise ValueError("error in the number of parameters passed")
         triple = [float(e) for e in triple]   # i.e. (mu, sigma, omega)
         for i in range(3):
             self.__setDegree(u, i, triple[i])
@@ -191,7 +191,7 @@ class NSset:
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('non-existent element')
+            raise IndexError("non-existent element")
         return self.__neutrosophicset[u]
 
     #------------------------------------
@@ -210,7 +210,7 @@ class NSset:
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.getUniverse():
-            raise IndexError('non-existent element')
+            raise IndexError("non-existent element")
         return self.__neutrosophicset[u][i]
 
 

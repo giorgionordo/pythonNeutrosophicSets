@@ -23,8 +23,8 @@ class NSmapping:
         ----
         Parameters:
         - args: generic argument; it can be a single parameter corresponding to:
-                - a dictionary element:obj
-                - a string with a list of correspondance element->obj, or
+                - a dictionary element:value
+                - a string with a list of correspondance element->value, or
                 - an already existent object NSmapping
                 or a triple of arguments representing respectively:
                 - domain
@@ -48,8 +48,8 @@ class NSmapping:
                 domain = NSuniverse(list(map.keys()))
                 codomain = NSuniverse(list(set(map.values())))  # elimina gli elementi ripetuti nei valori
             elif type(args[0]) == str:  # se è un dizionario esteso in formato stringa preleva gli elementi
-                map_dict = NSstringToDict(args[0])  # ottiene il dizionario dalla stringa
-                nsmap = NSmapping(map_dict)  # crea un oggetto NSmapping utilizzano lo stesso costruttore per funzioni passando il dizionario
+                map_dict = NSstringToDict(args[0])  # ottiene il dizionario dalla stringa utilizzando una funzione di utilità
+                nsmap = NSmapping(map_dict)  # crea un oggetto NSmapping utilizzando lo stesso costruttore per funzioni passando il dizionario
                 # ottiene dominio, codominio e mappa dall'aggetto NSmapping
                 domain = nsmap.getDomain()
                 codomain = nsmap.getCodomain()
@@ -77,16 +77,20 @@ class NSmapping:
             #----------- se i valori sono espressi come dizionario o in formato stringa dizionario esteso
             if type(values)==dict or NSisExtDict(values)==True:
                 # ---- crea un oggetto di tipo NSmapping con lo stesso costruttore fornendo solo i valori
+                # come dizionario o dizionario esteso
                 nsmap = NSmapping(values)
                 # ------------ effettua i controlli tra il dominio e il codominio forniti e quello dell'oggetto ottenuto
                 # verifica che il dominio della funzione ottenuta e quello dato coincidano
                 # (la funzione deve essere ovunque definita) altrimenti solleva una eccezione
-                if nsmap.getDomain() != domain:
-                    raise ValueError("the indicated domain is incompatible with the definition of the function")
+                # si noti che occorre confrontare i due domini come insiemi semplici,
+                # cioè senza tenere conto dell'ordine degli elementi
+                if set(nsmap.getDomain()) != set(domain):
+                    raise ValueError("the indicated domain is incompatible with the definition of the mapping")
                 # verifica che il codominio della funzione ottenuta sia contenuto in quello dato
                 # (l'immagine deve essere contenuta nell'insieme di arrivo) altrimenti solleva una eccezione
+
                 if nsmap.getCodomain().isSubset(codomain) == False:
-                    raise ValueError("the indicated codomain is incompatible with the definition of the function")
+                    raise ValueError("the indicated codomain is incompatible with the definition of the mapping")
                 # se invece c'è compatibilità tra domini e codomini estrai il dizionario delle corrispondenze
                 map = nsmap.getMap()
 
@@ -95,7 +99,8 @@ class NSmapping:
                 if type(values) in [list, tuple]:  # tratta il sottocaso liste o tuple
                     values = [str(e) for e in values]  # converti in lista di stringhe
                 else:                    # tratta il sottocaso stringa contenente lista o tupla
-                    sostituz = {"[": "", "]": "", "(": "", ")": "", ",": " ", ";": " "}
+                    sostituz = {"[": "", "]": "", "(": "", ")": "",
+                                ",": " ", ";": " "}
                     values = NSreplace(values, sostituz).split()  # sostituisce i valori e riduce a lista
                 #----------- operazioni comuni ai due casi
                 # controlla che il numero di valori sia pari alla cardinalità del dominio
@@ -107,11 +112,12 @@ class NSmapping:
                 if not values_set.issubset(codomain_set):
                     raise ValueError("one or more values do not belong to the declared codomain")
                 # procede col preparare l'associazione dei valori nel dizionario map
+                # trattandosi di lista o di una tupla segue l'ordine naturale
                 for i in range(card_domain):
                     map[domain.get()[i]] = values[i]
 
             else:   # in tutti gli altri casi solleva una eccezione
-                raise ValueError("the third parameter of the constructor method must express a obj match")
+                raise ValueError("the third parameter of the constructor method must express a value match")
 
         # ---------- se non ci sono uno tre parametri solleva una eccezione --------------------------------------
         else:
@@ -142,21 +148,21 @@ class NSmapping:
         return NSuniverse(self.__codomain.get())
 
 
-    # restituisce le coppie elemento-obj come dizionario
+    # restituisce le coppie elemento-valorej come dizionario
     def getMap(self):
-        """ Obtain all the element-obj pair defining the mapping.
+        """ Obtain all the element:value pair defining the mapping.
         ----
-        Returns: the dictionary containing the element-obj pairs of the mapping
+        Returns: the dictionary containing the element-value pairs of the mapping
         """
         return self.__map
 
 
     # ------------------------------------------------------------------------------------
 
-    # assegna il obj mediante la funzione per uno specifico elemento
+    # assegna il valore mediante la funzione per uno specifico elemento
     def setValue(self, u, v):
         """
-        Assigns a single obj by the neutrosophic mapping to a specific element of the domain, i.e. f(u)=v
+        Assigns a single value by the neutrosophic mapping to a specific element of the domain, i.e. f(u)=v
         ----
         Parameters:
         - u: element of the domain
@@ -165,27 +171,27 @@ class NSmapping:
         u = str(u)
         v = str(v)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.__domain.get():
-            raise IndexError('non-existent element in the domain of the function')
+            raise IndexError("non-existent element in the domain of the mapping")
         if v not in self.__codomain.get():
-            raise IndexError('non-existent element in the codomain of the function')
+            raise IndexError("non-existent element in the codomain of the mapping")
         self.__map[u] = v
 
 
     # ------------------------------------------------------------------------------------
 
-    # ottiene il obj mediante la funzione di un determinato elemento del dominio
+    # ottiene il valore mediante la funzione di un determinato elemento del dominio
     def getValue(self, u):
         """
-        Get the obj by the neutrosophic mapping of a specific element of the domain.
+        Get the value by the neutrosophic mapping of a specific element of the domain.
         ----
         Parameters:
         - e: element of the domain
         ----
-        Returns: the obj of u by the current mapping
+        Returns: the value of u by the current mapping
         """
         u = str(u)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if u not in self.__domain.get():
-            raise IndexError('non-existent element in the domain of the function')
+            raise IndexError("non-existent element in the domain of the mapping")
         return self.__map[u]
 
 
@@ -204,7 +210,7 @@ class NSmapping:
         """
         v = str(v)  # converte in stringa per confrontarla con gli elementi dell'universo che è lista di stringhe
         if v not in self.__codomain.get():
-            raise IndexError('non-existent element in the codomain of the function')
+            raise IndexError("non-existent element in the codomain of the mapping")
         fibre = list()
         for e in self.__map:
             if self.__map[e] == v:
@@ -309,7 +315,7 @@ class NSmapping:
         unvwidth = 28               # larghezza in colonne del dominio e del codominio
         totwidth = unvwidth*2 + 8   # calcolo della larghezza totale
         s = f"\n {self.getDomain():>{unvwidth}}   ->   {self.getCodomain():<{unvwidth}}\n" + "-" * totwidth + "\n"
-        for e in self.__map:
+        for e in self.__domain:     # per consentire la stampa degli elementi nell'ordine definito nel dominio
             s += f" {e:>{unvwidth}}  |->  {self.__map[e]:<{unvwidth}}\n"
         return s
 

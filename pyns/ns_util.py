@@ -68,8 +68,9 @@ def NSstringToDict(text):
     ----
     Returns: the dictionary corresponding to the structure defined in the string
     """
-    sostituz = {"'": "", '"': "", "(": "", ")": "", "[": "", "]": "", "{": "", "}": "",
-                " ": ",", ";": ",", ",,": ",", "|->": ":", "->": ':'}
+    sostituz = {"'": "", '"': "", "(": "", ")": "", "[": "", "]": "",
+                "{": "", "}": "", " ": ",", ";": ",", ",,": ",",
+                "|->": ":", "->": ':'}
     text = NSreplace(text, sostituz)
     # avendo rimosso le stringhe (e i delimitatori) trasforma prima le chiavi in formato stringa
     listcouples = text.split(',')  # spezza le coppie
