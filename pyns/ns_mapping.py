@@ -47,8 +47,11 @@ class NSmapping:
                 map = args[0]
                 domain = NSuniverse(list(map.keys()))
                 codomain = NSuniverse(list(set(map.values())))  # elimina gli elementi ripetuti nei valori
-            elif type(args[0]) == str:  # se è un dizionario esteso in formato stringa preleva gli elementi
-                map_dict = NSstringToDict(args[0])  # ottiene il dizionario dalla stringa utilizzando una funzione di utilità
+            elif type(args[0]) == str:  # se è una stringa prova a prelevarne gli elementi conme dizionario esteso
+                try:
+                    map_dict = NSstringToDict(args[0])  # ottiene il dizionario dalla stringa utilizzando una funzione di utilità
+                except:
+                    raise ValueError("invalid parameter")
                 nsmap = NSmapping(map_dict)  # crea un oggetto NSmapping utilizzando lo stesso costruttore per funzioni passando il dizionario
                 # ottiene dominio, codominio e mappa dall'aggetto NSmapping
                 domain = nsmap.getDomain()
