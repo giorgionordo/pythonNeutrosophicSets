@@ -26,12 +26,12 @@ both for the internal representation of neutrosophic sets and for the definition
 between universe sets. To make it even easier and more streamlined to use such structures
 both in interactive mode as well as in writing client code based on such classes, it was chosen
 to also allow their representation as a string and in free format, i.e., leaving the user free to:
-• indifferently use not only the usual symbol : (colon) but also alternatively the strings
+-  indifferently use not only the usual symbol : (colon) but also alternatively the strings
 -> (arrow) and |-> (maps-to) as separators between keys and values
-• indifferently use not only the usual symbol , (comma) but also ; (semicolon) as separators
+- indifferently use not only the usual symbol , (comma) but also ; (semicolon) as separators
 of the value-key pairs
 in any combination thereof, and we will refer to this type of representation by the name
 extended dictionary. In other words, while a classical Python dictionary has a form like:
-{key1 : value1, key2 : value2, . . . keyn : valuen} ,
+'{key1 : value1, key2 : value2, . . . keyn : valuen}' ,
 an extended dictionary can be expressed as strings of the type:
-"key1->value1,key2|->value2; . . . keyn->valuen" .
+'"key1->value1,key2|->value2; . . . keyn->valuen"' .
