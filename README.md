@@ -32,6 +32,10 @@ to also allow their representation as a string and in free format, i.e., leaving
 of the value-key pairs
 in any combination thereof, and we will refer to this type of representation by the name
 extended dictionary. In other words, while a classical Python dictionary has a form like:
-'{key1 : value1, key2 : value2, . . . keyn : valuen}' ,
+```
+{key1 : value1, key2 : value2, . . . keyn : valuen}
+```,
 an extended dictionary can be expressed as strings of the type:
-'"key1->value1,key2|->value2; . . . keyn->valuen"' .
+```
+"key1->value1,key2|->value2; . . . keyn->valuen"'
+```
