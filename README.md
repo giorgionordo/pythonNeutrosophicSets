@@ -2,8 +2,8 @@
 
 
 Giorgio Nordo - Dipartimento MIFT, Università di Messina, Italy
-
 www.nordo.it   |  giorgio.nordo@unime.it 
+
 ---
 
 **PYthon Neutrosophic Sets framework** (**PYNS** for short) is an open source framework developed in Python and consisting of three
