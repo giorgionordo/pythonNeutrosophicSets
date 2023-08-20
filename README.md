@@ -118,38 +118,37 @@ True
 
 Finally, the following code executed in interactive mode in the Python console illustrates
 how to define and manage mappings on neutrosophic sets.
+
 ```
->>> from pyns.ns_universe import NSuniverse
->>> from pyns.ns_set import NSset
->>> from pyns.ns_mapping import NSmapping
->>> U = NSuniverse("a,b,c")
->>> V = NSuniverse(1,2)
->>> f = NSmapping(U,V, (2,1,2))
+>>> U = NSuniverse("a,b,c,d,e")
+>>> V = NSuniverse(1,2,3,4)
+>>> f = NSmapping(U, V, (1,3,1,2,1))
 >>> print(f)
-{ a, b, c } -> { 1, 2 }
+            { a, b, c, d, e }   ->   { 1, 2, 3, 4 }
 ----------------------------------------------------------------
-a |-> 2
-b |-> 1
-c |-> 2
->>> print(f.getValue(’a’))
-2
->>> g = NSmapping("a->2 b->1 c->2")
->>> print( f==g )
-True
->>> print(g)
-{ a, b, c } -> { 1, 2 }
+                            a  |->  1
+                            b  |->  3
+                            c  |->  1
+                            d  |->  2
+                            e  |->  1
+>>> A = NSset(U, "(0.7,0.3,0.1), (0.4,0.6,0.9), (0,0,1), (0.1,0.4,0.5), (0.2,0.2,0.3)")
+>>> print(f"{A:t}")
+            |   membership   |  indeterminacy | non-membership |
 ----------------------------------------------------------------
-a |-> 2
-b |-> 1
-c |-> 2
->>> print(h.getDomain())
-{ a, b, c }
->>> print(h.getCodomain())
-{ 1, 2 }
->>> print(f.getMap())
-{’a’: ’2’, ’b’: ’1’, ’c’: ’2’}
->>> h = NSmapping("a,b,c", "1,2", "a->2 b->1 c->2")
->>> print( f==h )
+ a          |            0.7 |            0.3 |            0.1 |
+ b          |            0.4 |            0.6 |            0.9 |
+ c          |            0.0 |            0.0 |            1.0 |
+ d          |            0.1 |            0.4 |            0.5 |
+ e          |            0.2 |            0.2 |            0.3 |
+----------------------------------------------------------------
+>>> B = f.NSimage(A)
+>>> print(B)
+< 1/(0.7,0.3,0.1), 2/(0.1,0.4,0.5), 3/(0.4,0.6,0.9),
+4/(1.0,1.0,0.0) >
+>>> C = f.NScounterimage(B)
+< a/(0.7,0.3,0.1), b/(0.4,0.6,0.9), c/(0.7,0.3,0.1),
+d/(0.1,0.4,0.5), e/(0.7,0.3,0.1) >
+>>> print(A.isNSsubset(C))
 True
 ```
 
