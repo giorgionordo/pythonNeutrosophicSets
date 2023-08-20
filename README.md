@@ -11,7 +11,7 @@ www.nordo.it   |  giorgio.nordo@unime.it
 distinct classes designed to manipulate in a simple and intuitive way both symbolic representations of neutrosophic
 sets over universes of various types as well as mappings between them. The code is described in detail
 and many examples and use cases are also provided.
-The entire framework was designed, written and tested for the paper titled Python Framework for Neutrosophic Sets and Mappings.
+The entire framework was designed, written and tested for the paper titled **A Python Framework for Neutrosophic Sets and Mappings**.
 
 The PYthon Neutrosophic Sets framework consists of three classes designed 
 to manage respectively universe sets (the NSuniverse class),
