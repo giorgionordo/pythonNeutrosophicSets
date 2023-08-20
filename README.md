@@ -1,5 +1,5 @@
 ---
-title: ## pyns (PYthon Neutrosophic Sets framework)
+# pyns (PYthon Neutrosophic Sets framework)
 author: Giorgio Nordo - Dipartimento MIFT, Università di Messina, Italy
 www.nordo.it   |  giorgio.nordo@unime.it 
 ---
