@@ -37,5 +37,14 @@ extended dictionary. In other words, while a classical Python dictionary has a f
 ``` 
 an extended dictionary can be expressed as strings of the type:
 ```
-"key1->value1,key2|->value2; . . . keyn->valuen"'
+"key1->value1,key2|->value2; . . . keyn->valuen"
 ```
+
+Both the code and the underlying data structures of the three classes NSuniverse, NSset
+and NSmapping have been explained in detail and also concrete examples of using the introduced
+objects and methods have been given.
+The attention given to the usability of these classes and the extensive documentation provided
+with a rich assortment of examples and use cases, gives us confidence that, in addition to
+being used for the exploration of uncertain data and practical applications, it can be the subject
+of further study and expansion opening up new research perspectives in various scientific
+and applied disciplines that use the tools of neutrosophic set theory.
