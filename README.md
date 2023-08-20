@@ -34,7 +34,7 @@ in any combination thereof, and we will refer to this type of representation by 
 extended dictionary. In other words, while a classical Python dictionary has a form like:
 ```
 {key1 : value1, key2 : value2, . . . keyn : valuen}
-```,
+``` ,
 an extended dictionary can be expressed as strings of the type:
 ```
 "key1->value1,key2|->value2; . . . keyn->valuen"'
