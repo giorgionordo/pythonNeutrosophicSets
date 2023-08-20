@@ -88,7 +88,7 @@ let us consider the following example of code executed interactively in the Pyth
 < a/(1,1,0), b/(1,1,0), c/(1,1,0) >
 ```
 
-The following example illustrates how the methods and operators defined above can be
+The following example illustrates how the neutrosophic set operators can
 easily and profitably used in the interactive mode by means of the Python console.
 
 ```
